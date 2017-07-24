@@ -1,4 +1,36 @@
 = golang-bittrex-api
 Alessandro Sanino <saninoale@gmail.com>
-This repository is a golang porting of v2.0 Bittrex API
+
+This repository is a golang porting of v2.0 Bittrex API.
+
+Response Type is application/json in case of status code 200 (OK) while it is text/html in case of error 404 (checked 07/24/2017)
+
+== List of endpoints
+=== Public API
+. APIVersion :
+URL : `https://bittrex.com/Content/version.txt`
+
+METHOD : `GET`
+
+PARAMS : `_:int`
+
+EXAMPLE : `GET https://bittrex.com/Content/version.txt?_=1500912655800`
+
+COMMENT : Probably `_` is a timestamp.
+
+RESPONSE : 
+[source, javascript]
+----
+{
+    version : 2.11
+}
+----
+  
+. GetMarketSummaries :
+
+URL : https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670
+METHOD : GET
+PARAMS : _:int
+EXAMPLE : GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670
+COMMENT : Probably _ is a timestamp.
 
