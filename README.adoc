@@ -41,7 +41,7 @@ RESPONSE :
 [source, javascript]
 ----
 {
-    version : 2.11
+    version : 2.11 // API version
 }
 ----
 
@@ -62,8 +62,8 @@ RESPONSE :
     success : true,
     message : "",
     result : {
-        bpi : {
-            USD : {
+        bpi : { // ???
+            USD : { // USD data 
                code: "USD",
                description: "United States Dollar",
                rate: "2,782.6863",
@@ -71,7 +71,7 @@ RESPONSE :
             },
             disclaimer: "This data was produced from the CoinDesk Bitcoin Price Index (USD). Non-USD currency data converted using hourly conversion rate from openexchangerates.org"
         },
-        time : {
+        time : { //time data of operation on coin
             updated: "Jul 24, 2017 16:33:00 UTC",
             updatedISO: "2017-07-24T16:33:00+00:00",
             updateduk: "Jul 24, 2017 at 17:33 BST"
@@ -99,10 +99,10 @@ RESPONSE :
 { 
     message : '',
     success : true,
-    result : [
+    result : [ //array
     {
         IsVerified : false,
-        Market : { 
+        Market : { // Market object
             BaseCurrency : "BITCNY",
             BaseCurrencyLong : "BitCNY",
             Created : "2015-12-11T06:31:40.653",
@@ -115,7 +115,7 @@ RESPONSE :
             MinTradeSize : 1e-8,
             Notice : ""
         },
-        Summary : { 
+        Summary : { //MarketSummary object
             Ask: 18619.09547372,
             BaseVolume: 16801.39641099,
             Bid: 18101.72000003,
@@ -158,7 +158,7 @@ RESPONSE :
         CoinType: "ETH_CONTRACT",
         Currency: "CVC",
         CurrencyLong: "Civic"
-        Health : {
+        Health : { // CoinHealth object
             BlockHeight: 4067747,
             Currency: "CVC",
             DepositQueueDepth: 0,
@@ -177,4 +177,37 @@ RESPONSE :
 }
 ----
 
-COMMENT : Probably this request requires authentication
+COMMENT : Probably this request requires authentication.
+
+==== GetTicks
+
+URL : `https://bittrex.com/Api/v2.0/pub/market/GetTicks`
+
+METHOD : `GET`
+
+PARAMS : `marketName:string`, `tickInterval:string`, `_:int`
+
+EXAMPLE : `https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289433`
+
+RESPONSE :
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : [ // Array of candles
+    {
+        BV: 13.14752793,          // ?????
+        C: 0.000121,              // close
+        H: 0.00182154,            // high
+        L: 0.0001009,             // low
+        O: 0.00182154,            // open
+        T: "2017-07-16T23:00:00", // timestamp
+        V: 68949.3719684          // 24h volume ??
+    },
+    ...
+    { ... }
+    ]
+    
+}
+----
