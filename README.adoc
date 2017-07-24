@@ -44,7 +44,43 @@ RESPONSE :
     version : 2.11
 }
 ----
-  
+
+==== GetBTCPrice :
+
+URL : `https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
+
+METHOD : `GET`
+
+PARAMS : None
+
+EXAMPLE : `GET https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
+
+RESPONSE :
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : {
+        bpi : {
+            USD : {
+               code: "USD",
+               description: "United States Dollar",
+               rate: "2,782.6863",
+               rate_float: 2782.6863
+            },
+            disclaimer: "This data was produced from the CoinDesk Bitcoin Price Index (USD). Non-USD currency data converted using hourly conversion rate from openexchangerates.org"
+        },
+        time : {
+            updated: "Jul 24, 2017 16:33:00 UTC",
+            updatedISO: "2017-07-24T16:33:00+00:00",
+            updateduk: "Jul 24, 2017 at 17:33 BST"
+        }
+    }
+}
+----
+
+
 ==== GetMarketSummaries :
 
 URL : `https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries`
@@ -58,6 +94,7 @@ EXAMPLE : `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=150
 COMMENT : Probably `_` is a timestamp.
 
 RESPONSE :
+[source, javascript]
 ----
 { 
     message : '',
@@ -93,10 +130,11 @@ RESPONSE :
             TimeStamp: "2017-07-24T16:24:28.54",
             Volume: 0.91026451
         }
-    }
+    },
+    ...
+    { ... }
     ]
-    
 }
 ----
 
-====
+==== 
