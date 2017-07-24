@@ -228,3 +228,45 @@ RESPONSE :
     }]
 }
 ----
+
+=== Private API
+
+==== GetOrderHistory
+
+|=======
+|URL     | https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
+|METHOD  | `POST`
+|PARAMS  | `__RequestVerificationToken:string`
+|EXAMPLE | `POST https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory` with data `{ __RequestVerificationToken:"HIDDEN_FOR_PRIVACY" }`
+|COMMENT | Probably requires authentication.
+|=======
+
+RESPONSE :
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : [ //array of orders
+        {
+            Closed: "2017-07-23T21:01:04.65",
+            Commission: 0.00024937,
+            Condition: "NONE",
+            ConditionTarget: null,
+            Exchange: "BTC-RDD",
+            ImmediateOrCancel: false,
+            IsConditional: false,
+            Limit: 4.8e-7,
+            OrderType: "LIMIT_BUY",
+            OrderUuid: "44e8751c-3df8-4a75-841b-c7c2145b746b",
+            Price: 0.09975,
+            PricePerUnit: 4.8e-7,
+            Quantity: 207812.5,
+            QuantityRemaining: 0,
+            TimeStamp: "2017-07-23T18:17:40.387"
+        },
+        ...
+        { ... }
+    ]
+}
+----
