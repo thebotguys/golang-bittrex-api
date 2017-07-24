@@ -3,20 +3,21 @@ Alessandro Sanino <saninoale@gmail.com>
 
 This repository is a golang porting of v2.0 Bittrex API.
 
-Response Type is application/json in case of status code 200 (OK) while it is text/html in case of error 404 (checked 07/24/2017)
+Response Type is application/json in case of status code 200 (OK) 
+
+while it is text/html in case of error 404 (checked 07/24/2017)
 
 == List of endpoints
 === Public API
 ==== Ping :
-URL : https://socket.bittrex.com/signalr/ping
-
-METHOD : `GET`
-
-PARAMS : `_:int`
-
-EXAMPLE : `GET https://socket.bittrex.com/signalr/ping?_=1500913483677`
-
-RESPONSE : 
+|=======
+|URL     | https://socket.bittrex.com/signalr/ping
+|METHOD  | `GET`
+|PARAMS  | `_:int`
+|EXAMPLE | `GET https://socket.bittrex.com/signalr/ping?_=1500913483677`
+|COMMENT | Probably `_` is a timestamp.
+|=======
+RESPONSE :
 [source, javascript]
 ----
 {
@@ -24,19 +25,14 @@ RESPONSE :
 }
 ----
 
-COMMENT : Probably `_` is a timestamp.
-
 ==== APIVersion :
-URL : `https://bittrex.com/Content/version.txt`
-
-METHOD : `GET`
-
-PARAMS : `_:int`
-
-EXAMPLE : `GET https://bittrex.com/Content/version.txt?_=1500912655800`
-
-COMMENT : Probably `_` is a timestamp.
-
+|=======
+|URL     | `https://bittrex.com/Content/version.txt`
+|METHOD  | `GET`
+|PARAMS  | `_:int`
+|EXAMPLE | `GET https://bittrex.com/Content/version.txt?_=1500912655800`
+|COMMENT | Probably `_` is a timestamp.
+|=======
 RESPONSE : 
 [source, javascript]
 ----
@@ -46,15 +42,12 @@ RESPONSE :
 ----
 
 ==== GetBTCPrice :
-
-URL : `https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
-
-METHOD : `GET`
-
-PARAMS : None
-
-EXAMPLE : `GET https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
-
+|=======
+|URL     | `https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
+|METHOD  | `GET`
+|PARAMS  | None
+|EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
+|=======
 RESPONSE :
 [source, javascript]
 ----
@@ -82,14 +75,13 @@ RESPONSE :
 
 
 ==== GetMarketSummaries :
-
-URL : `https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries`
-
-METHOD : `GET`
-
-PARAMS : `_:int`
-
-EXAMPLE : `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670`
+|=======
+|URL     | `https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries`
+|METHOD  | `GET`
+|PARAMS  | `_:int`
+|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670`
+|COMMENT | Probably `_` is a timestamp.
+|=======
 
 RESPONSE :
 [source, javascript]
@@ -135,17 +127,15 @@ RESPONSE :
 }
 ----
 
-COMMENT : Probably `_` is a timestamp.
-
 ==== GetCurrencyInfo :
 
-URL : `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
-
-METHOD : `POST`
-
-PARAMS : `currencyName:string`, `__RequestVerificationToken:string`
-
-EXAMPLE : POST `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo` with data : `{ currencyName: "CVC", __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+|=======
+|URL     | `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
+|METHOD  | `POST`
+|PARAMS  | `currencyName:string`, `__RequestVerificationToken:string`
+|EXAMPLE | POST `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo` with data : `{ currencyName: "CVC", __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+|COMMENT | Probably this request requires authentication.
+|=======
 
 RESPONSE : 
 [source, javascript]
@@ -177,17 +167,15 @@ RESPONSE :
 }
 ----
 
-COMMENT : Probably this request requires authentication.
-
 ==== GetTicks
 
-URL : `https://bittrex.com/Api/v2.0/pub/market/GetTicks`
-
-METHOD : `GET`
-
-PARAMS : `marketName:string`, `tickInterval:string`, `_:int`
-
-EXAMPLE : `https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289433`
+|=======
+|URL     | `https://bittrex.com/Api/v2.0/pub/market/GetTicks`
+|METHOD  | `GET`
+|PARAMS  | `marketName:string`, `tickInterval:string`, `_:int`
+|EXAMPLE | `https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289433`
+|COMMENT | Probably `_` is a timestamp.
+|=======
 
 RESPONSE :
 [source, javascript]
@@ -212,17 +200,15 @@ RESPONSE :
 }
 ----
 
-COMMENT : Probably `_` is a timestamp.
-
 ==== GetLatestTick
 
-URL : `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick`
-
-METHOD : `GET`
-
-PARAMS : `marketName:string`, `tickInterval:string`, `_:int`
-
-EXAMPLE : `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289434`
+|=======
+|URL     | `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick`
+|METHOD  | `GET`
+|PARAMS  | `marketName:string`, `tickInterval:string`, `_:int`
+|EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289434`
+|COMMENT | Probably `_` is a timestamp.
+|=======
 
 RESPONSE : 
 [source, javascript]
@@ -242,5 +228,3 @@ RESPONSE :
     }]
 }
 ----
-
-COMMENT : Probably `_` is a timestamp.
