@@ -10,6 +10,8 @@ while it is text/html in case of error 404 (checked 07/24/2017)
 == List of endpoints
 === Public API
 ==== Ping :
+Pings the API to check if they are up.
+
 |=======
 |URL     | https://socket.bittrex.com/signalr/ping
 |METHOD  | `GET`
@@ -26,6 +28,8 @@ RESPONSE :
 ----
 
 ==== APIVersion :
+Gets the version of the API from their servers.
+
 |=======
 |URL     | `https://bittrex.com/Content/version.txt`
 |METHOD  | `GET`
@@ -42,6 +46,8 @@ RESPONSE :
 ----
 
 ==== GetBTCPrice :
+Gets the Bittrex BTC Price in USD.
+
 |=======
 |URL     | `https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
 |METHOD  | `GET`
@@ -75,6 +81,8 @@ RESPONSE :
 
 
 ==== GetMarketSummaries :
+Gets all the market summaries.
+
 |=======
 |URL     | `https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries`
 |METHOD  | `GET`
@@ -128,6 +136,7 @@ RESPONSE :
 ----
 
 ==== GetCurrencyInfo :
+Gets info about a coin.
 
 |=======
 |URL     | `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
@@ -168,6 +177,7 @@ RESPONSE :
 ----
 
 ==== GetTicks
+Gets the candles for a market.
 
 |=======
 |URL     | `https://bittrex.com/Api/v2.0/pub/market/GetTicks`
@@ -201,6 +211,7 @@ RESPONSE :
 ----
 
 ==== GetLatestTick
+Gets the last candle for a market.
 
 |=======
 |URL     | `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick`
@@ -232,6 +243,7 @@ RESPONSE :
 === Private API
 
 ==== GetOrderHistory
+Gets the full order history of the user.
 
 |=======
 |URL     | https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
@@ -268,5 +280,84 @@ RESPONSE :
         ...
         { ... }
     ]
+}
+----
+
+=== TradeBuy
+Creates a buy order.
+
+|=======
+| URL     | `https://bittrex.com/api/v2.0/auth/market/TradeBuy`
+| METHOD  | `POST`
+| PARAMS  | `MarketName:string`, `OrderType:string`, `Quantity:float`, `Rate:float`, `TimeInEffect:string`,`ConditionType:string`, `Target:int` `__RequestVerificationToken:string`
+| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeBuy` with data `{ MarketName: "BTC-DGB, OrderType:"LIMIT", Quantity: 10000.02, Rate: 0.0000004, TimeInEffect:"GOOD_TIL_CANCELED", ConditionType: "NONE", Target: 0, __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+| COMMENT | Probably requires authentication.
+|=======
+
+RESPONSE :
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : { //results are different from example, this is a real response from a real request.
+        BuyOrSell: "Buy",
+        MarketCurrency: "DGB",
+        MarketName: "BTC-DGB",
+        OrderId: "cb31d615-91eb-408f-87c3-b35b7d751817",
+        OrderType: "LIMIT",
+        Quantity: 49875,
+        Rate:1e-8
+    }
+}
+----
+
+=== TradeSell 
+Creates a sell order
+
+|=======
+| URL     | `https://bittrex.com/api/v2.0/auth/market/TradeSell`
+| METHOD  | `POST`
+| PARAMS  | `MarketName:string`, `OrderType:string`, `Quantity:float`, `Rate:float`, `TimeInEffect:string`,`ConditionType:string`, `Target:int` `__RequestVerificationToken:string`
+| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeBSell` with data `{ MarketName: "BTC-DGB, OrderType:"LIMIT", Quantity: 10000.02, Rate: 0.0000004, TimeInEffect:"GOOD_TIL_CANCELED", ConditionType: "NONE", Target: 0, __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+| COMMENT | Probably requires authentication.
+|=======
+
+RESPONSE :
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : { //results are different from example, this is a real response from a real request.
+        BuyOrSell: "Sell",
+        MarketCurrency: "DGB",
+        MarketName: "BTC-DGB",
+        OrderId: "HIDDEN_FOR_PRIVACY",
+        OrderType: "LIMIT",
+        Quantity: 49875,
+        Rate:1e-8
+    }
+}
+----
+
+=== TradeCancel
+Cancels a submitted order.
+
+|=======
+| URL     | `https://bittrex.com/api/v2.0/auth/market/TradeCancel`
+| METHOD  | `POST`
+| PARAMS  | `MarketName:string`, `orderId:string`, `__RequestVerificationToken:string`
+| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeCancel` with data `{ MarketName: "BTC-DGB", orderId:"HIDDEN_FOR_PRIVACY", `__RequestVerificationToken:"HIDDEN_FOR_PRIVACY"}`
+| COMMENT | Probably requires authentication.
+|=======
+
+RESPONSE :
+[source, javascript]
+----
+{
+    success: true,
+    message: "",
+    result:null
 }
 ----
