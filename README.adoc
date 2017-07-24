@@ -7,7 +7,7 @@ Response Type is application/json in case of status code 200 (OK) while it is te
 
 == List of endpoints
 === Public API
-. APIVersion :
+==== APIVersion :
 URL : `https://bittrex.com/Content/version.txt`
 
 METHOD : `GET`
@@ -26,11 +26,15 @@ RESPONSE :
 }
 ----
   
-. GetMarketSummaries :
+==== GetMarketSummaries :
 
-URL : https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670
-METHOD : GET
-PARAMS : _:int
-EXAMPLE : GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670
-COMMENT : Probably _ is a timestamp.
+URL : `https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries`
+
+METHOD : `GET`
+
+PARAMS : `_:int`
+
+EXAMPLE : `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670`
+
+COMMENT : Probably `_` is a timestamp.
 
