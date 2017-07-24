@@ -7,6 +7,25 @@ Response Type is application/json in case of status code 200 (OK) while it is te
 
 == List of endpoints
 === Public API
+==== Ping :
+URL : https://socket.bittrex.com/signalr/ping
+
+METHOD : `GET`
+
+PARAMS : `_:int`
+
+EXAMPLE : `GET https://socket.bittrex.com/signalr/ping?_=1500913483677`
+
+RESPONSE : 
+[source, javascript]
+----
+{
+   Response: "pong"
+}
+----
+
+COMMENT : Probably `_` is a timestamp.
+
 ==== APIVersion :
 URL : `https://bittrex.com/Content/version.txt`
 
@@ -40,13 +59,13 @@ COMMENT : Probably `_` is a timestamp.
 
 RESPONSE :
 ----
-{ //MarketSummaryResponse object
+{ 
     message : '',
     success : true,
     result : [
     {
         IsVerified : false,
-        Market : { //market object
+        Market : { 
             BaseCurrency : "BITCNY",
             BaseCurrencyLong : "BitCNY",
             Created : "2015-12-11T06:31:40.653",
@@ -59,7 +78,7 @@ RESPONSE :
             MinTradeSize : 1e-8,
             Notice : ""
         },
-        Summary : { //MarketSummary object
+        Summary : { 
             Ask: 18619.09547372,
             BaseVolume: 16801.39641099,
             Bid: 18101.72000003,
