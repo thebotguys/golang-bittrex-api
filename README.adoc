@@ -38,3 +38,47 @@ EXAMPLE : `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=150
 
 COMMENT : Probably `_` is a timestamp.
 
+RESPONSE :
+----
+{ //MarketSummaryResponse object
+    message : '',
+    success : true,
+    result : [
+    {
+        IsVerified : false,
+        Market : { //market object
+            BaseCurrency : "BITCNY",
+            BaseCurrencyLong : "BitCNY",
+            Created : "2015-12-11T06:31:40.653",
+            IsActive : true,
+            IsSponsored : null,
+            LogoUrl : null,
+            MarketCurrency : "BTC",
+            MarketCurrencyLong : "Bitcoin",
+            MarketName : "BITCNY-BTC",
+            MinTradeSize : 1e-8,
+            Notice : ""
+        },
+        Summary : { //MarketSummary object
+            Ask: 18619.09547372,
+            BaseVolume: 16801.39641099,
+            Bid: 18101.72000003,
+            Created: "2015-12-11T06:31:40.653",
+            High: 18989.52,
+            Last: 18359.80273687,
+            Low: 17600.14,
+            MarketName: "BITCNY-BTC",
+            OpenBuyOrders: 440,
+            OpenSellOrders: 237,
+            PrevDay: 18100,
+            TimeStamp: "2017-07-24T16:24:28.54",
+            Volume: 0.91026451
+        }
+    },
+    ...
+    ]
+    
+}
+----
+
+====
