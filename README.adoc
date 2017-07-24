@@ -91,8 +91,6 @@ PARAMS : `_:int`
 
 EXAMPLE : `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670`
 
-COMMENT : Probably `_` is a timestamp.
-
 RESPONSE :
 [source, javascript]
 ----
@@ -136,6 +134,8 @@ RESPONSE :
     ]
 }
 ----
+
+COMMENT : Probably `_` is a timestamp.
 
 ==== GetCurrencyInfo :
 
@@ -195,7 +195,7 @@ RESPONSE :
 {
     success : true,
     message : "",
-    result : [ // Array of candles
+    result : [ // Array of candle objects.
     {
         BV: 13.14752793,          // ?????
         C: 0.000121,              // close
@@ -211,3 +211,36 @@ RESPONSE :
     
 }
 ----
+
+COMMENT : Probably `_` is a timestamp.
+
+==== GetLatestTick
+
+URL : `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick`
+
+METHOD : `GET`
+
+PARAMS : `marketName:string`, `tickInterval:string`, `_:int`
+
+EXAMPLE : `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289434`
+
+RESPONSE : 
+[source, javascript]
+----
+{
+    success: true,
+    message: "",
+    result: [ //array with a single element, candle object
+    {
+        O: 0.00007687,
+        H: 0.00007687, 
+        L: 0.00007345,
+        C: 0.00007586,
+        V: 125354.20568187,
+        T: "2017-07-24T16:30:00",
+        BV: 9.38510573
+    }]
+}
+----
+
+COMMENT : Probably `_` is a timestamp.
