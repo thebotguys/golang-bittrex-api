@@ -1,0 +1,4 @@
+= golang-bittrex-api
+Alessandro Sanino <saninoale@gmail.com>
+This repository is a golang porting of v2.0 Bittrex API
+
