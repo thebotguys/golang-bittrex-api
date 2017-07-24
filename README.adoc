@@ -137,4 +137,44 @@ RESPONSE :
 }
 ----
 
-==== 
+==== GetCurrencyInfo :
+
+URL : `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
+
+METHOD : `POST`
+
+PARAMS : `currencyName:string`, `__RequestVerificationToken:string`
+
+EXAMPLE : POST `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo` with data : `{ currencyName: "CVC", __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+
+RESPONSE : 
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : {
+        BaseAddress:"0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98",
+        CoinType: "ETH_CONTRACT",
+        Currency: "CVC",
+        CurrencyLong: "Civic"
+        Health : {
+            BlockHeight: 4067747,
+            Currency: "CVC",
+            DepositQueueDepth: 0,
+            IsActive: true,
+            LastChecked: "2017-07-24T16:53:00.33",
+            MinutesSinceBHUpdated: 0,
+            WalletBalance: 0,
+            WalletConnections: 0,
+            WithdrawQueueDepth: 0
+        },
+        IsActive: true,
+        MinConfirmation: 36,
+        Notice: null,
+        TxFee: 0.01
+    }
+}
+----
+
+COMMENT : Probably this request requires authentication
