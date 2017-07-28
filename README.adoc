@@ -159,7 +159,7 @@ RESPONSE :
         Volume: 45628.13656093,
         Last: 0.07067988,
         BaseVolume: 3289.09283520,
-        TimeStamp: 2017-07-28T20:28:27.797",
+        TimeStamp: "2017-07-28T20:28:27.797",
         Bid: 0.07067989,
         Ask: 0.07089528,
         OpenBuyOrders: 2743,
