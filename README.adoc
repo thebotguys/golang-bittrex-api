@@ -135,6 +135,41 @@ RESPONSE :
 }
 ----
 
+==== GetMarketSummary :
+Gets the summary of a single market.
+
+|=======
+|URL     | `https://bittrex.com/Api/v2.0/pub/market/GetMarketSummary`
+|METHOD  | `GET`
+|PARAMS  | `marketName:string`, `_:int`
+|EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/market/GetMarketSummary?marketName=BTC-ETH&_=1500913483670`
+|COMMENT | Probably `_` is a timestamp.
+|=======
+
+RESPONSE :
+[source, javascript]
+----
+{ 
+    message : '',
+    success : true,
+    result : {
+        MarketName: BTC-ETH,
+        High: 0.07817998,
+        Low: 0.06604577,
+        Volume: 45628.13656093,
+        Last: 0.07067988,
+        BaseVolume: 3289.09283520,
+        TimeStamp: 2017-07-28T20:28:27.797",
+        Bid: 0.07067989,
+        Ask: 0.07089528,
+        OpenBuyOrders: 2743,
+        OpenSellOrders: 14066,
+        PrevDay: 0.07800000,
+        Created: "2015-08-14T09:02:24.817"
+    }
+}
+----
+
 ==== GetCurrencyInfo :
 Gets info about a coin.
 
