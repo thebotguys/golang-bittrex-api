@@ -170,47 +170,6 @@ RESPONSE :
 }
 ----
 
-==== GetCurrencyInfo :
-Gets info about a coin.
-
-|=======
-|URL     | `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
-|METHOD  | `POST`
-|PARAMS  | `currencyName:string`, `__RequestVerificationToken:string`
-|EXAMPLE | POST `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo` with data : `{ currencyName: "CVC", __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
-|COMMENT | Probably this request requires authentication.
-|=======
-
-RESPONSE : 
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : {
-        BaseAddress:"0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98",
-        CoinType: "ETH_CONTRACT",
-        Currency: "CVC",
-        CurrencyLong: "Civic"
-        Health : { // CoinHealth object
-            BlockHeight: 4067747,
-            Currency: "CVC",
-            DepositQueueDepth: 0,
-            IsActive: true,
-            LastChecked: "2017-07-24T16:53:00.33",
-            MinutesSinceBHUpdated: 0,
-            WalletBalance: 0,
-            WalletConnections: 0,
-            WithdrawQueueDepth: 0
-        },
-        IsActive: true,
-        MinConfirmation: 36,
-        Notice: null,
-        TxFee: 0.01
-    }
-}
-----
-
 ==== GetTicks
 Gets the candles for a market.
 
@@ -354,7 +313,7 @@ Creates a sell order
 | URL     | `https://bittrex.com/api/v2.0/auth/market/TradeSell`
 | METHOD  | `POST`
 | PARAMS  | `MarketName:string`, `OrderType:string`, `Quantity:float`, `Rate:float`, `TimeInEffect:string`,`ConditionType:string`, `Target:int` `__RequestVerificationToken:string`
-| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeBSell` with data `{ MarketName: "BTC-DGB, OrderType:"LIMIT", Quantity: 10000.02, Rate: 0.0000004, TimeInEffect:"GOOD_TIL_CANCELED", ConditionType: "NONE", Target: 0, __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeSell` with data `{ MarketName: "BTC-DGB, OrderType:"LIMIT", Quantity: 10000.02, Rate: 0.0000004, TimeInEffect:"GOOD_TIL_CANCELED", ConditionType: "NONE", Target: 0, __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
 | COMMENT | Probably requires authentication.
 |=======
 
@@ -394,5 +353,46 @@ RESPONSE :
     success: true,
     message: "",
     result:null
+}
+----
+
+==== GetCurrencyInfo :
+Gets info about a coin.
+
+|=======
+|URL     | `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
+|METHOD  | `POST`
+|PARAMS  | `currencyName:string`, `__RequestVerificationToken:string`
+|EXAMPLE | POST `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo` with data : `{ currencyName: "CVC", __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
+|COMMENT | Probably this request requires authentication.
+|=======
+
+RESPONSE : 
+[source, javascript]
+----
+{
+    success : true,
+    message : "",
+    result : {
+        BaseAddress:"0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98",
+        CoinType: "ETH_CONTRACT",
+        Currency: "CVC",
+        CurrencyLong: "Civic"
+        Health : { // CoinHealth object
+            BlockHeight: 4067747,
+            Currency: "CVC",
+            DepositQueueDepth: 0,
+            IsActive: true,
+            LastChecked: "2017-07-24T16:53:00.33",
+            MinutesSinceBHUpdated: 0,
+            WalletBalance: 0,
+            WalletConnections: 0,
+            WithdrawQueueDepth: 0
+        },
+        IsActive: true,
+        MinConfirmation: 36,
+        Notice: null,
+        TxFee: 0.01
+    }
 }
 ----
