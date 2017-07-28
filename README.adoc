@@ -153,7 +153,7 @@ RESPONSE :
     message : '',
     success : true,
     result : {
-        MarketName: BTC-ETH,
+        MarketName: "BTC-ETH",
         High: 0.07817998,
         Low: 0.06604577,
         Volume: 45628.13656093,
