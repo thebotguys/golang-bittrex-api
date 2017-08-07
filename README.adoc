@@ -178,7 +178,7 @@ Gets the candles for a market.
 |METHOD  | `GET`
 |PARAMS  | `marketName:string`, `tickInterval:string`, `_:int`
 |EXAMPLE | `https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289433`
-|COMMENT | Probably `_` is a timestamp.
+|COMMENT | Probably `_` is a timestamp. `tickInterval` must be in `[“oneMin”, “fiveMin”, “thirtyMin”, “hour”, “day”]`.
 |=======
 
 RESPONSE :
@@ -212,7 +212,7 @@ Gets the last candle for a market.
 |METHOD  | `GET`
 |PARAMS  | `marketName:string`, `tickInterval:string`, `_:int`
 |EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289434`
-|COMMENT | Probably `_` is a timestamp.
+|COMMENT | Probably `_` is a timestamp. `tickInterval` must be in `[“oneMin”, “fiveMin”, “thirtyMin”, “hour”, “day”]`.
 |=======
 
 RESPONSE : 
