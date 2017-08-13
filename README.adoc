@@ -7,6 +7,11 @@ Response Type is application/json in case of status code 200 (OK)
 
 while it is text/html in case of error 404 (checked 07/24/2017)
 
+General note: it seems all URLS are case insensitive, so for ex.:
+`https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice` equals to `https://bittrex.com/api/v2.0/pub/currencies/getbtcprice`
+
+Private API requires HMAC signature
+
 == List of endpoints
 === Public API
 ==== Ping :
@@ -49,10 +54,10 @@ RESPONSE :
 Gets the Bittrex BTC Price in USD.
 
 |=======
-|URL     | `https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
+|URL     | `https://bittrex.com/api/v2.0/pub/currencies/GetBTCPrice`
 |METHOD  | `GET`
 |PARAMS  | None
-|EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice`
+|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/currencies/GetBTCPrice`
 |=======
 RESPONSE :
 [source, javascript]
