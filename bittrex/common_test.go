@@ -27,3 +27,11 @@ while on this client it is %s.`,
 			latestTestedVersion, version)
 	}
 }
+
+func TestGetBTCPrice(t *testing.T) {
+	testIsAPIAlive(t)
+	_, err := bittrex.GetBTCPrice()
+	if err != nil {
+		t.Fatal(err)
+	}
+}

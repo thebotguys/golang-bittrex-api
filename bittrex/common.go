@@ -1,13 +1,10 @@
 package bittrex
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 // BaseURL represents the base URL for all requests
@@ -18,80 +15,39 @@ const (
 	APIVersion = "2.0"
 )
 
-type Bittrex struct {
+type Auth struct {
 	PublicKey  string // The public key to connect to bittrex API.
 	PrivateKey string // The private key to connect to bittrex API.
 }
 
 // APIOptions lol
-type APIOptions struct{}
+type APIOptions struct {
+	hmacSignature interface{}
+	Auth          Auth
+}
 
 func checkOptions() *APIOptions {
 	return nil
 }
 
-func (b Bittrex) apiCall(Version, Visibility, Entity, Feature string, options APIOptions) error {
-	//client := http.DefaultClient
-	//URL := fmt.Sprintf("%s/v%s/%s/%s/%s", BaseURL, Version, Visibility, Entity, Feature)
+// apiCall performs a generic API call.
+func apiCall(Version, Visibility, Entity, Feature string, options *APIOptions) (*json.RawMessage, error) {
+	client := http.DefaultClient
+	URL := fmt.Sprintf("%s/v%s/%s/%s/%s", BaseURL, Version, Visibility, Entity, Feature)
+	return nil, nil
+}
+
+// publicCall performs a call to the public bittrex API. It does not need API Keys.
+func publicCall(Entity, Feature string, options *APIOptions) (*json.RawMessage, error) {
+	options = checkOptions()
+	return apiCall(APIVersion, Public, Entity, Feature, options)
+}
+
+func authCall(Entity, Feature string, options *APIOptions) (*json.RawMessage, error) {
 	//options = checkOptions()
-	return nil
-}
-
-// IsAPIAlive returns true if the bittrex api is reachable with the current network connection.
-func IsAPIAlive() error {
-	var pingResponse struct {
-		Response string `json:"response,required"`
+	if options.Auth.PublicKey == "" || options.Auth.PrivateKey == "" {
+		return nil, errors.New("Cannot perform private api requst without authentication keys")
 	}
-	timestamp := time.Now().UTC().Unix()
-	URL := fmt.Sprintf("https://socket.bittrex.com/signalr/ping?_=%d", timestamp)
-	response, err := http.Get(URL)
-	if err != nil {
-		return err
-	}
-	defer response.Body.Close()
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(body, &pingResponse)
-	if err != nil {
-		return err
-	}
-	if pingResponse.Response == "pong" {
-		return nil
-	}
-	return errors.New("API is not live")
-}
-
-// GetServerAPIVersion returns the version which is currently running on the server.
-func GetServerAPIVersion() (string, error) {
-	var versionResponse struct {
-		Version json.Number `json:"version,required,Number"`
-	}
-	timestamp := time.Now().UTC().Unix()
-	URL := fmt.Sprintf("https://bittrex.com/Content/version.txt?_=%d", timestamp)
-	response, err := http.Get(URL)
-	if err != nil {
-		return "", err
-	}
-	defer response.Body.Close()
-
-	if response.StatusCode != 200 {
-		return "", errors.New("Status Code" + string(response.StatusCode))
-	}
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return "", err
-	}
-	body = bytes.TrimPrefix(body, []byte("\xef\xbb\xbf"))
-
-	err = json.Unmarshal(body, &versionResponse)
-	if err != nil {
-		return "", err
-	}
-
-	return versionResponse.Version.String(), nil
+	//createHMAC signature
+	return apiCall(APIVersion, Private, Entity, Feature, options)
 }
