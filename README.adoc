@@ -1,6 +1,8 @@
 = golang-bittrex-api
 Alessandro Sanino <saninoale@gmail.com>
 
+image:https://travis-ci.org/thebotguys/golang-bittrex-api.svg?branch=master["Build Status", link="https://travis-ci.org/thebotguys/golang-bittrex-api"]
+
 This repository is a golang porting of v2.0 Bittrex API.
 
 Response Type is application/json in case of status code 200 (OK) 
