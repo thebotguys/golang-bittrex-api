@@ -3,6 +3,8 @@
 *.dll
 *.so
 *.dylib
+bittrex
+golang-bittrex-api
 
 # Test binary, build with `go test -c`
 *.test
