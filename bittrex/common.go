@@ -86,7 +86,6 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 		return nil, err
 	}
 
-	fmt.Print(string(content))
 	var ret response
 	err = json.Unmarshal(content, &ret)
 	if err != nil {
