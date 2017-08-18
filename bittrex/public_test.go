@@ -28,3 +28,19 @@ func TestGetBTCPrice(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestGetTicks(t *testing.T) {
+	testIsAPIAlive(t)
+	_, err := bittrex.GetTicks("BTC-ETH", "thirtyMin")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestGetLatestTick(t *testing.T) {
+	testIsAPIAlive(t)
+	_, err := bittrex.GetLatestTick("BTC-ETH", "thirtyMin")
+	if err != nil {
+		t.Fatal(err)
+	}
+}
