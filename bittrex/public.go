@@ -80,3 +80,12 @@ func GetBTCPrice() (*BTCPrice, error) {
 	}
 	return &btcPrice, nil
 }
+
+// GetLatestTick returns the latest tick of the
+// specified market's candlestick chart.
+func GetLatestTick(marketName string) error {
+	options := APIOptions{
+		MarketName: marketName,
+	}
+	result, err := publicCall("market", "GetLatestTick", nil)
+}

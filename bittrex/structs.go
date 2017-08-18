@@ -2,6 +2,7 @@ package bittrex
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -35,6 +36,49 @@ type btcPriceResult struct {
 		UpdatedUK  string `json:"updateduk,omitempty"`
 	} `json:"time,required"`
 }
+
+type ticksResult struct {
+	Ticks CandleSticks `json:"ticks,required"`
+}
+
+// CandleStick represents a single candlestick in a chart.
+type CandleStick struct {
+	High       float64    `json:"H,required"`
+	Open       float64    `json:"O,required"`
+	Close      float64    `json:"C,required"`
+	Low        float64    `json:"L,required"`
+	Volume     float64    `json:"V,required"`
+	BaseVolume float64    `json:"BV,required"`
+	Timestamp  candleTime `json:"T,required"`
+}
+
+// CandleIntervals represent all valid intervals supported
+// by the GetTicks and GetLatestTick calls.
+var CandleIntervals = map[string]bool{
+	"oneMin":    true,
+	"fiveMin":   true,
+	"thirtyMin": true,
+	"hour":      true,
+	"day":       true,
+}
+
+type candleTime time.Time
+
+func (t *candleTime) UnmarshalJSON(b []byte) error {
+	if len(b) < 2 {
+		return fmt.Errorf("could not parse time %s", string(b))
+	}
+	// trim enclosing ""
+	result, err := time.Parse("2006-01-02T15:04:05", string(b))
+	if err != nil {
+		return fmt.Errorf("could not parse time: %v", err)
+	}
+	*t = candleTime(result)
+	return nil
+}
+
+//CandleSticks is an array of CandleStick objects
+type CandleSticks []CandleStick
 
 func (result btcPriceResult) Compress() BTCPrice {
 	value, _ := result.Bpi.USD.RateFloat.Float64()
