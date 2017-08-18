@@ -10,7 +10,9 @@ import (
 )
 
 func init() {
-	defaultConnOpts = ConnectOptions{}
+	defaultConnOpts = ConnectOptions{
+		ConnTimeout: time.Second * 5,
+	}
 }
 
 // BaseURL represents the base URL for all requests
@@ -40,30 +42,32 @@ type ConnectOptions struct {
 	ConnTimeout   time.Duration
 }
 
-// checkOptions checks the specified options and sets them to the default values.
-func checkOptions(options *ConnectOptions) *ConnectOptions {
-	return nil
+// fixBrokenOpts checks the specified options and sets them to the default values.
+func fixBrokenOpts(options **ConnectOptions) {
+	*options = &defaultConnOpts
 }
 
 // apiCall performs a generic API call.
 func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicParams, PostParameters *privateParams, options *ConnectOptions) (*json.RawMessage, error) {
+	fixBrokenOpts(&options)
 	client := http.Client{
 		Timeout: options.ConnTimeout,
 	}
 	URL := fmt.Sprintf("%s/v%s/%s/%s/%s", BaseURL, Version, Visibility, Entity, Feature)
 	req, err := http.NewRequest("GET", URL, nil)
-	req.Header.Add("Accept", "application/json")
-
 	if err != nil {
 		return nil, err
 	}
+	req.Header.Add("Accept", "application/json")
 
 	if Visibility == Public && GetParameters != nil { // Add them to query string
-		GetParameters.AddToQueryString(req.URL.Query())
+		queryString := req.URL.Query()
+		GetParameters.AddToQueryString(&queryString)
+		req.URL.RawQuery = queryString.Encode()
 	} else if Visibility == Private {
 		addSecurityHeaders(req.Header)
 		if PostParameters != nil {
-			PostParameters.AddToPostForm(req.PostForm)
+			PostParameters.AddToPostForm(&req.PostForm)
 		}
 	}
 
@@ -82,6 +86,7 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 		return nil, err
 	}
 
+	fmt.Print(string(content))
 	var ret response
 	err = json.Unmarshal(content, &ret)
 	if err != nil {
@@ -99,7 +104,7 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 //
 // It does not need API Keys.
 func publicCall(Entity, Feature string, GetParameters *publicParams, options *ConnectOptions) (*json.RawMessage, error) {
-	options = checkOptions(options)
+	fixBrokenOpts(&options)
 	return apiCall(APIVersion, Public, Entity, Feature, GetParameters, nil, options)
 }
 
@@ -107,7 +112,7 @@ func publicCall(Entity, Feature string, GetParameters *publicParams, options *Co
 //
 // It needs an Auth struct to be passed with valid Keys.
 func authCall(Entity, Feature string, PostParams *privateParams, options *ConnectOptions) (*json.RawMessage, error) {
-	//options = checkOptions()
+	//options = fixBrokenOpts()
 	if options.Auth.PublicKey == "" || options.Auth.PrivateKey == "" {
 		return nil, errors.New("Cannot perform private api requst without authentication keys")
 	}

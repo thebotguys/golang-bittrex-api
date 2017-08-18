@@ -37,10 +37,6 @@ type btcPriceResult struct {
 	} `json:"time,required"`
 }
 
-type ticksResult struct {
-	Ticks CandleSticks `json:"ticks,required"`
-}
-
 // CandleStick represents a single candlestick in a chart.
 type CandleStick struct {
 	High       float64    `json:"H,required"`
@@ -51,6 +47,10 @@ type CandleStick struct {
 	BaseVolume float64    `json:"BV,required"`
 	Timestamp  candleTime `json:"T,required"`
 }
+
+// CandleSticks is an array of CandleStick objects. It is a result from GetTicks
+// and GetLatestTick calls too.
+type CandleSticks []CandleStick
 
 // CandleIntervals represent all valid intervals supported
 // by the GetTicks and GetLatestTick calls.
@@ -69,16 +69,13 @@ func (t *candleTime) UnmarshalJSON(b []byte) error {
 		return fmt.Errorf("could not parse time %s", string(b))
 	}
 	// trim enclosing ""
-	result, err := time.Parse("2006-01-02T15:04:05", string(b))
+	result, err := time.Parse("2006-01-02T15:04:05", string(b[1:len(b)-1]))
 	if err != nil {
 		return fmt.Errorf("could not parse time: %v", err)
 	}
 	*t = candleTime(result)
 	return nil
 }
-
-//CandleSticks is an array of CandleStick objects
-type CandleSticks []CandleStick
 
 func (result btcPriceResult) Compress() BTCPrice {
 	value, _ := result.Bpi.USD.RateFloat.Float64()

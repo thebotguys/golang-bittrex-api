@@ -101,18 +101,20 @@ func GetTicks(marketName, tickInterval string) (CandleSticks, error) {
 
 // tickFunc is a common pattern for GetTicks and GetLatestTick functions.
 func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error) {
+	now := time.Now().Unix()
 	GetParameters := publicParams{
 		MarketName:   &marketName,
 		TickInterval: &tickInterval,
+		Timestamp:    &now,
 	}
 	result, err := publicCall("market", "GetLatestTick", &GetParameters, nil)
 	if err != nil {
 		return nil, err
 	}
-	var ret ticksResult
+	var ret CandleSticks
 	err = json.Unmarshal(*result, &ret)
 	if err != nil {
 		return nil, err
 	}
-	return ret.Ticks, nil
+	return ret, nil
 }
