@@ -11,7 +11,7 @@ import (
 
 func init() {
 	defaultConnOpts = ConnectOptions{
-		ConnTimeout: time.Second * 5,
+		ConnTimeout: time.Second * 10,
 	}
 }
 
