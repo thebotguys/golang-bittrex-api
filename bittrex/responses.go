@@ -20,6 +20,31 @@ type versionResponse struct {
 	Version json.Number `json:"version,required,Number"`
 }
 
+type marketSummaryResult struct {
+	MarketName     string  `json:"MarketName,required"`     //The name of the market (e.g. BTC-ETH).
+	High           float64 `json:"High,required"`           // The 24h high for the market.
+	Low            float64 `json:"Low,required"`            // The 24h low for the market.
+	Last           float64 `json:"Last,required"`           // The value of the last trade for the market (in base currency).
+	Bid            float64 `json:"Bid,required"`            // The current highest bid value for the market.
+	Ask            float64 `json:"Ask,required"`            // The current lowest ask value for the market.
+	Volume         float64 `json:"Volume,required"`         // The 24h volume of the market, in market currency.
+	BaseVolume     float64 `json:"BaseVolume,required"`     // The 24h volume for the market, in base currency.
+	Timestamp      string  `json:"Timestamp,required"`      // The timestamp of the request.
+	OpenBuyOrders  uint64  `json:"OpenBuyOrders,required"`  // The number of currently open buy orders.
+	OpenSellOrders uint64  `json:"OpenSellOrders,required"` // The number of currently open sell orders.
+	PrevDay        float64 `json:"PrevDay,required"`        //??????
+	Created        string  `json:"Created,required"`        // The timestamp of the creation of the market.
+}
+
+type marketSummariesResult []struct {
+	IsVerified bool                `json:"IsVerified"`
+	Market     marketResult        `json:"Market,required"`
+	Summary    marketSummaryResult `json:"Summary,required"`
+}
+
+type marketResult struct {
+}
+
 type btcPriceResult struct {
 	Bpi struct {
 		USD struct {

@@ -1,6 +1,9 @@
 package bittrex
 
-import "net/url"
+import (
+	"fmt"
+	"net/url"
+)
 
 // publicParams represents the possible public parameters that can
 // be passed for public Api calls.
@@ -20,6 +23,7 @@ func (pp publicParams) AddToQueryString(queryString *url.Values) {
 		if pp.TickInterval != nil {
 			queryString.Set("tickInterval", *pp.TickInterval)
 		}
+		queryString.Set("_", fmt.Sprint(*pp.Timestamp))
 	}
 }
 
