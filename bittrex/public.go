@@ -67,7 +67,7 @@ func GetServerAPIVersion() (string, error) {
 
 // GetBTCPrice returns the current BTC Price.
 func GetBTCPrice() (*BTCPrice, error) {
-	result, err := publicCall("currencies", "GetBTCPrice", nil)
+	result, err := publicCall("currencies", "GetBTCPrice", nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -82,10 +82,37 @@ func GetBTCPrice() (*BTCPrice, error) {
 }
 
 // GetLatestTick returns the latest tick of the
-// specified market's candlestick chart.
-func GetLatestTick(marketName string) error {
-	options := APIOptions{
-		MarketName: marketName,
+// specified market's candlestick chart,
+// following the specified tick interval.
+func GetLatestTick(marketName, tickInterval string) (*CandleStick, error) {
+	ticks, err := tickFunc(marketName, tickInterval, "GetLatestTick")
+	if err != nil {
+		return nil, err
 	}
-	result, err := publicCall("market", "GetLatestTick", nil)
+	return &ticks[0], nil
+}
+
+// GetTicks returns the ticks of the
+// specified market's candlestick chart,
+// following the specified tick interval.
+func GetTicks(marketName, tickInterval string) (CandleSticks, error) {
+	return tickFunc(marketName, tickInterval, "GetTicks")
+}
+
+// tickFunc is a common pattern for GetTicks and GetLatestTick functions.
+func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error) {
+	GetParameters := publicParams{
+		MarketName:   &marketName,
+		TickInterval: &tickInterval,
+	}
+	result, err := publicCall("market", "GetLatestTick", &GetParameters, nil)
+	if err != nil {
+		return nil, err
+	}
+	var ret ticksResult
+	err = json.Unmarshal(*result, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret.Ticks, nil
 }

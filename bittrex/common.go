@@ -41,7 +41,7 @@ type ConnectOptions struct {
 }
 
 // checkOptions checks the specified options and sets them to the default values.
-func checkOptions() *ConnectOptions {
+func checkOptions(options *ConnectOptions) *ConnectOptions {
 	return nil
 }
 
