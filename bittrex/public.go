@@ -99,6 +99,48 @@ func GetTicks(marketName, tickInterval string) (CandleSticks, error) {
 	return tickFunc(marketName, tickInterval, "GetTicks")
 }
 
+// GetMarketSummaries gets the summary of all markets.
+func GetMarketSummaries() (MarketSummaries, error) {
+	now := time.Now().Unix()
+	GetParameters := publicParams{
+		Timestamp: &now,
+	}
+	result, err := publicCall("market", "GetMarketSummaries", &GetParameters, nil)
+	if err != nil {
+		return nil, err
+	}
+	var resp marketSummariesResult
+	err = json.Unmarshal(*result, &resp)
+	if err != nil {
+		return nil, err
+	}
+	ret := make(MarketSummaries, len(resp))
+	for i, respItem := range resp {
+		ret[i] = respItem.Summary
+	}
+	return ret, nil
+}
+
+// GetMarketSummary gets the summary of a single market.
+func GetMarketSummary(marketName string) (*MarketSummary, error) {
+	now := time.Now().Unix()
+	GetParameters := publicParams{
+		MarketName: &marketName,
+		Timestamp:  &now,
+	}
+	result, err := publicCall("market", "GetMarketSummary", &GetParameters, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var ret MarketSummary
+	err = json.Unmarshal(*result, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return &ret, nil
+}
+
 // tickFunc is a common pattern for GetTicks and GetLatestTick functions.
 func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error) {
 	now := time.Now().Unix()

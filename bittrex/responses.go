@@ -20,7 +20,8 @@ type versionResponse struct {
 	Version json.Number `json:"version,required,Number"`
 }
 
-type marketSummaryResult struct {
+// MarketSummary is the summary data of a market (usually 24h summary).
+type MarketSummary struct {
 	MarketName     string  `json:"MarketName,required"`     //The name of the market (e.g. BTC-ETH).
 	High           float64 `json:"High,required"`           // The 24h high for the market.
 	Low            float64 `json:"Low,required"`            // The 24h low for the market.
@@ -32,14 +33,17 @@ type marketSummaryResult struct {
 	Timestamp      string  `json:"Timestamp,required"`      // The timestamp of the request.
 	OpenBuyOrders  uint64  `json:"OpenBuyOrders,required"`  // The number of currently open buy orders.
 	OpenSellOrders uint64  `json:"OpenSellOrders,required"` // The number of currently open sell orders.
-	PrevDay        float64 `json:"PrevDay,required"`        //??????
+	PrevDay        float64 `json:"PrevDay,required"`        // The closing price 24h before.
 	Created        string  `json:"Created,required"`        // The timestamp of the creation of the market.
 }
 
+//MarketSummaries is a set of MarketSummary objects.
+type MarketSummaries []MarketSummary
+
 type marketSummariesResult []struct {
-	IsVerified bool                `json:"IsVerified"`
-	Market     marketResult        `json:"Market,required"`
-	Summary    marketSummaryResult `json:"Summary,required"`
+	IsVerified bool          `json:"IsVerified"`
+	Market     marketResult  `json:"Market,required"`
+	Summary    MarketSummary `json:"Summary,required"`
 }
 
 type marketResult struct {
