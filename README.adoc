@@ -86,6 +86,46 @@ RESPONSE :
 }
 ----
 
+==== GetMarkets
+Gets all markets data.
+
+|=======
+|URL     | `https://bittrex.com/api/v2.0/pub/markets/GetMarkets`
+|METHOD  | `GET`
+|PARAMS  | `_:int`
+|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/markets/GetMarkets?_=1500913483670`
+|COMMENT | Probably `_` is a timestamp.
+|=======
+
+RESPONSE :
+[source, javascript]
+----
+{ 
+    message : '',
+    success : true,
+    result : [ //array 
+    { // Market object
+            BaseCurrency : "BITCNY",
+            BaseCurrencyLong : "BitCNY",
+            Created : "2015-12-11T06:31:40.653",
+            IsActive : true,
+            IsSponsored : null,
+            LogoUrl : null,
+            MarketCurrency : "BTC",
+            MarketCurrencyLong : "Bitcoin",
+            MarketName : "BITCNY-BTC",
+            MinTradeSize : 1e-8,
+            Notice : ""
+        }
+    },
+    ...
+    { ... }
+    ]
+}
+----
+
+==== GetMarket
+Not found up to now...
 
 ==== GetMarketSummaries :
 Gets all the market summaries.

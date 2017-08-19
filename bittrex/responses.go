@@ -42,12 +42,35 @@ type MarketSummaries []MarketSummary
 
 type marketSummariesResult []struct {
 	IsVerified bool          `json:"IsVerified"`
-	Market     marketResult  `json:"Market,required"`
+	Market     Market        `json:"Market,required"`
 	Summary    MarketSummary `json:"Summary,required"`
 }
 
-type marketResult struct {
+// OpenOrder represents a currently open order.
+type OpenOrder struct {
 }
+
+// OrderBook represents a set of public open Orders, which compose the OrderBook.
+type OrderBook []OpenOrder
+
+// Market represents a market metadata (name, base currency, trade currency)
+// and so forth.
+type Market struct {
+	BaseCurrency       string  `json:"BaseCurrency,required"`
+	BaseCurrencyLong   string  `json:"BaseCurrencyLong,required"`
+	MarketCurrency     string  `json:"MarketCurrency,required"`
+	MarketCurrencyLong string  `json:"MarketCurrencyLong,required"`
+	MarketName         string  `json:"MarketName,required"`
+	MinTradeSize       float64 `json:"MinTradeSize,required"`
+	IsActive           bool    `json:"IsActive,required"`
+	Created            string  `json:"Created,required"`
+	Notice             string  `json:"Notice,required"`
+	IsSponsored        bool    `json:"IsSponsored,required"`
+	LogoURL            string  `json:"LogoUrl,required"`
+}
+
+// Markets is a set of markets.
+type Markets []Market
 
 type btcPriceResult struct {
 	Bpi struct {

@@ -164,3 +164,26 @@ func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error
 	}
 	return ret, nil
 }
+
+// GetOrderBook gets the current order book, made up by currently open orders.
+func GetOrderBook(marketName string) (OrderBook, error) {
+	return nil, nil
+}
+
+func GetMarkets() (Markets, error) {
+	now := time.Now().Unix()
+	GetParameters := publicParams{
+		Timestamp: &now,
+	}
+	result, err := publicCall("markets", "GetMarkets", &GetParameters, nil)
+	if err != nil {
+		return nil, err
+	}
+	var resp Markets
+	err = json.Unmarshal(*result, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp, nil
+}
