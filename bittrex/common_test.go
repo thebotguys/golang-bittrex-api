@@ -6,9 +6,10 @@ import (
 	"github.com/saniales/golang-bittrex-api/bittrex"
 )
 
-func testIsAPIAlive(t *testing.T) {
+func testIsAPIAlive(t *testing.T) bool {
 	err := bittrex.IsAPIAlive()
 	if err != nil {
-		t.SkipNow()
+		t.Log("API is not reachable, test is invalid")
 	}
+	return err == nil
 }

@@ -77,7 +77,7 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 	}
 
 	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("Status Code: %s", err)
+		return nil, fmt.Errorf("Status Code: %d", resp.StatusCode)
 	}
 	defer resp.Body.Close()
 

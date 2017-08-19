@@ -21,6 +21,10 @@ func IsAPIAlive() error {
 	}
 	defer response.Body.Close()
 
+	if response.StatusCode != 200 {
+		return fmt.Errorf("Status Code: %d", response.StatusCode)
+	}
+
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
@@ -48,7 +52,7 @@ func GetServerAPIVersion() (string, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != 200 {
-		return "", errors.New("Status Code" + string(response.StatusCode))
+		return "", fmt.Errorf("Status Code: %d", response.StatusCode)
 	}
 
 	body, err := ioutil.ReadAll(response.Body)
@@ -105,7 +109,7 @@ func GetMarketSummaries() (MarketSummaries, error) {
 	GetParameters := publicParams{
 		Timestamp: &now,
 	}
-	result, err := publicCall("market", "GetMarketSummaries", &GetParameters, nil)
+	result, err := publicCall("markets", "GetMarketSummaries", &GetParameters, nil)
 	if err != nil {
 		return nil, err
 	}

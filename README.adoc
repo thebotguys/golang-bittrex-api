@@ -91,10 +91,10 @@ RESPONSE :
 Gets all the market summaries.
 
 |=======
-|URL     | `https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries`
+|URL     | `https://bittrex.com/api/v2.0/pub/markets/GetMarketSummaries`
 |METHOD  | `GET`
 |PARAMS  | `_:int`
-|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/Markets/GetMarketSummaries?_=1500913483670`
+|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/markets/GetMarketSummaries?_=1500913483670`
 |COMMENT | Probably `_` is a timestamp.
 |=======
 
