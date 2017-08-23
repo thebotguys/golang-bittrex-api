@@ -3,6 +3,7 @@ package bittrex_test
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/thebotguys/golang-bittrex-api/bittrex"
 )
@@ -116,10 +117,12 @@ func TestGetMarketSummary(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
+		time.Sleep(time.Second)
 		val, err := bittrex.GetMarketSummary("INVALID-MARKET-HAHA") // error expected
 		if err == nil {
 			t.Fatal("Error expected, but function did not fail (GetMarketSummary(\"INVALID-MARKET-HAHA\"))\n Value Returned : " + fmt.Sprint(val))
 		}
+		time.Sleep(time.Second)
 		val, err = bittrex.GetMarketSummary("") // error expected
 		if err == nil {
 			t.Fatal("Error expected, but function did not fail (GetMarketSummary(\"\"))\n Value Returned : " + fmt.Sprint(val))

@@ -127,7 +127,7 @@ func GetMarketSummaries() (MarketSummaries, error) {
 
 // GetMarketSummary gets the summary of a single market.
 func GetMarketSummary(marketName string) (*MarketSummary, error) {
-	now := time.Now().Unix()
+	now := time.Now().UnixNano()
 	GetParameters := publicParams{
 		MarketName: &marketName,
 		Timestamp:  &now,

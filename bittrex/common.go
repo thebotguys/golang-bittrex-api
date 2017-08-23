@@ -58,7 +58,11 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Add("Accept", "application/json")
+
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Cache-Control", "no-cache")
+	req.Header.Add("Cache-Control", "no-store")
+	req.Header.Add("Cache-Control", "must-revalidate")
 
 	if Visibility == Public && GetParameters != nil { // Add them to query string
 		queryString := req.URL.Query()
