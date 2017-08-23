@@ -170,6 +170,7 @@ func GetOrderBook(marketName string) (OrderBook, error) {
 	return nil, nil
 }
 
+//GetMarkets gets all markets data.
 func GetMarkets() (Markets, error) {
 	now := time.Now().Unix()
 	GetParameters := publicParams{
