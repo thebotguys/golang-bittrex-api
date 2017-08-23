@@ -46,6 +46,7 @@ if err != nil {
 If you are *VERY HARDCORE* you can use an `Options` struct to handle all connections parameters, like `Connection Timeout`:
 [source, go]
 ----
+// Currently this feature is not implemented
 marketSummaries, err := bittrex.GetMarketSummaries(&bittrex.Options{
     ConnTimeout: time.Second * 30,
 })
