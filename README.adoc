@@ -13,7 +13,7 @@ $ go get github.com/thebotguys/golang-bittrex-api
 ----
 
 == Calling the API functions
-For public API is simple:
+For *Public API* is simple:
 [source, go]
 ----
 result, err := bittrex.APIFuncDesired(parameters)
@@ -21,7 +21,34 @@ if err != nil {
     // Handle error
 }
 // For example
-marketSummaries, err := bittrex.GetMarketSummaries("BTC-ETH")
+marketSummaries, err := bittrex.GetMarketSummary("BTC-ETH")
+if err != nil {
+    fmt.Println("ERROR OCCURRED: ", err)
+}
+----
+For *Private API* is almost equally simple, you have to provide an auth struct with your keys:
+[source, go]
+----
+auth := bittrex.Auth{
+    PublicKey: "YOUR-PUBLIC-KEY",
+    SecretKey: "YOUR-SECRET-KEY",
+}
+result, err := bittrex.PrivateAPIFuncDesired(auth, parameters)
+if err != nil {
+    // Handle error
+}
+// For example
+balances, err := bittrex.GetBalance(auth, "BTC")
+if err != nil {
+    fmt.Println("ERROR OCCURRED: ", err)
+}
+----
+If you are *VERY HARDCORE* you can use an `Options` struct to handle all connections parameters, like `Connection Timeout`:
+[source, go]
+----
+marketSummaries, err := bittrex.GetMarketSummaries(&bittrex.Options{
+    ConnTimeout: time.Second * 30,
+})
 if err != nil {
     fmt.Println("ERROR OCCURRED: ", err)
 }
