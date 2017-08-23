@@ -15,7 +15,7 @@ type publicParams struct {
 
 // AddToQueryString adds the non empty fields of the publicParams struct
 // to the specified query string.
-func (pp publicParams) AddToQueryString(queryString *url.Values) {
+func (pp *publicParams) AddToQueryString(queryString *url.Values) {
 	if queryString != nil {
 		if pp.MarketName != nil {
 			queryString.Set("marketName", *pp.MarketName)

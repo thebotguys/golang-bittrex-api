@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/saniales/golang-bittrex-api/bittrex"
+	"github.com/thebotguys/golang-bittrex-api/bittrex"
 )
 
 var latestTestedVersion = "2.11"

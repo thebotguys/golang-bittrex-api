@@ -3,7 +3,7 @@ package bittrex_test
 import (
 	"testing"
 
-	"github.com/saniales/golang-bittrex-api/bittrex"
+	"github.com/thebotguys/golang-bittrex-api/bittrex"
 )
 
 func testIsAPIAlive(t *testing.T) bool {
