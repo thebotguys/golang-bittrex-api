@@ -1,445 +1,55 @@
 = golang-bittrex-api
-Alessandro Sanino <saninoale@gmail.com>
+The Bot Guy <thebotguy@usa.com>
 
 image:https://travis-ci.org/thebotguys/golang-bittrex-api.svg?branch=master["Build Status", link="https://travis-ci.org/thebotguys/golang-bittrex-api"]
 
-This repository is a golang porting of v2.0 Bittrex API.
+This wrapper will allow to connect to Bittrex API (version 2.0)
 
-Response Type is application/json in case of status code 200 (OK) 
+== Getting the package
 
-while it is text/html in case of error 404 (checked 07/24/2017)
-
-General note: it seems all URLS are case insensitive, so for ex.:
-`https://bittrex.com/Api/v2.0/pub/currencies/GetBTCPrice` equals to `https://bittrex.com/api/v2.0/pub/currencies/getbtcprice`
-
-Private API requires HMAC signature
-
-== List of endpoints
-=== Public API
-==== Ping :
-Pings the API to check if they are up.
-
-|=======
-|URL     | https://socket.bittrex.com/signalr/ping
-|METHOD  | `GET`
-|PARAMS  | `_:int`
-|EXAMPLE | `GET https://socket.bittrex.com/signalr/ping?_=1500913483677`
-|COMMENT | Probably `_` is a timestamp.
-|=======
-RESPONSE :
-[source, javascript]
+[source, bash]
 ----
-{
-   Response: "pong"
+$ go get github.com/thebotguys/golang-bittrex-api
+----
+
+== Calling the API functions
+For public API is simple:
+[source, go]
+----
+result, err := bittrex.APIFuncDesired(parameters)
+if err != nil {
+    // Handle error
+}
+// For example
+marketSummaries, err := bittrex.GetMarketSummaries("BTC-ETH")
+if err != nil {
+    fmt.Println("ERROR OCCURRED: ", err)
+}
+----
+Check out the tests for an example of usage, but almost everytime will be as simple as the code above.
+
+You are strongly advised to check if the API is online at the start of your program, just copy paste the following code:
+[source, go]
+----
+err := bittrex.IsAPIAlive()
+if err != nil {
+    fmt.Println("CANNOT REACH BITTREX API SERVERS: ", err)
 }
 ----
 
-==== APIVersion :
-Gets the version of the API from their servers.
+== Roadmap
 
-|=======
-|URL     | `https://bittrex.com/Content/version.txt`
-|METHOD  | `GET`
-|PARAMS  | `_:int`
-|EXAMPLE | `GET https://bittrex.com/Content/version.txt?_=1500912655800`
-|COMMENT | Probably `_` is a timestamp.
-|=======
-RESPONSE : 
-[source, javascript]
-----
-{
-    version : 2.11 // API version
-}
-----
+. Public API
++ 
+These API are public and do not require API keys to work.
++
+  .. link:IsAPIAlive[IsAPIAlive]
+  .. link:IsAPIAlive[APIVersion]
+  .. link:IsAPIAlive[GetMarketSummaries]
+  .. link:IsAPIAlive[GetMarketSummary]
+  .. link:IsAPIAlive[GetMarkets]
+  .. link:IsAPIAlive[GetMarket]
+  .. link:IsAPIAlive[GetTicks]
+  .. link:IsAPIAlive[GetLatestTick]
 
-==== GetBTCPrice :
-Gets the Bittrex BTC Price in USD.
-
-|=======
-|URL     | `https://bittrex.com/api/v2.0/pub/currencies/GetBTCPrice`
-|METHOD  | `GET`
-|PARAMS  | None
-|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/currencies/GetBTCPrice`
-|=======
-RESPONSE :
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : {
-        bpi : { // ???
-            USD : { // USD data 
-               code: "USD",
-               description: "United States Dollar",
-               rate: "2,782.6863",
-               rate_float: 2782.6863
-            },
-            disclaimer: "This data was produced from the CoinDesk Bitcoin Price Index (USD). Non-USD currency data converted using hourly conversion rate from openexchangerates.org"
-        },
-        time : { //time data of operation on coin
-            updated: "Jul 24, 2017 16:33:00 UTC",
-            updatedISO: "2017-07-24T16:33:00+00:00",
-            updateduk: "Jul 24, 2017 at 17:33 BST"
-        }
-    }
-}
-----
-
-==== GetMarkets
-Gets all markets data.
-
-|=======
-|URL     | `https://bittrex.com/api/v2.0/pub/markets/GetMarkets`
-|METHOD  | `GET`
-|PARAMS  | `_:int`
-|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/markets/GetMarkets?_=1500913483670`
-|COMMENT | Probably `_` is a timestamp.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{ 
-    message : '',
-    success : true,
-    result : [ //array 
-    { // Market object
-            BaseCurrency : "BITCNY",
-            BaseCurrencyLong : "BitCNY",
-            Created : "2015-12-11T06:31:40.653",
-            IsActive : true,
-            IsSponsored : null,
-            LogoUrl : null,
-            MarketCurrency : "BTC",
-            MarketCurrencyLong : "Bitcoin",
-            MarketName : "BITCNY-BTC",
-            MinTradeSize : 1e-8,
-            Notice : ""
-        }
-    },
-    ...
-    { ... }
-    ]
-}
-----
-
-==== GetMarket
-Not found up to now...
-
-==== GetMarketSummaries :
-Gets all the market summaries.
-
-|=======
-|URL     | `https://bittrex.com/api/v2.0/pub/markets/GetMarketSummaries`
-|METHOD  | `GET`
-|PARAMS  | `_:int`
-|EXAMPLE | `GET https://bittrex.com/api/v2.0/pub/markets/GetMarketSummaries?_=1500913483670`
-|COMMENT | Probably `_` is a timestamp.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{ 
-    message : '',
-    success : true,
-    result : [ //array
-    {
-        IsVerified : false,
-        Market : { // Market object
-            BaseCurrency : "BITCNY",
-            BaseCurrencyLong : "BitCNY",
-            Created : "2015-12-11T06:31:40.653",
-            IsActive : true,
-            IsSponsored : null,
-            LogoUrl : null,
-            MarketCurrency : "BTC",
-            MarketCurrencyLong : "Bitcoin",
-            MarketName : "BITCNY-BTC",
-            MinTradeSize : 1e-8,
-            Notice : ""
-        },
-        Summary : { //MarketSummary object
-            Ask: 18619.09547372,
-            BaseVolume: 16801.39641099,
-            Bid: 18101.72000003,
-            Created: "2015-12-11T06:31:40.653",
-            High: 18989.52,
-            Last: 18359.80273687,
-            Low: 17600.14,
-            MarketName: "BITCNY-BTC",
-            OpenBuyOrders: 440,
-            OpenSellOrders: 237,
-            PrevDay: 18100,
-            TimeStamp: "2017-07-24T16:24:28.54",
-            Volume: 0.91026451
-        }
-    },
-    ...
-    { ... }
-    ]
-}
-----
-
-==== GetMarketSummary :
-Gets the summary of a single market.
-
-|=======
-|URL     | `https://bittrex.com/Api/v2.0/pub/market/GetMarketSummary`
-|METHOD  | `GET`
-|PARAMS  | `marketName:string`, `_:int`
-|EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/market/GetMarketSummary?marketName=BTC-ETH&_=1500913483670`
-|COMMENT | Probably `_` is a timestamp.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{ 
-    message : '',
-    success : true,
-    result : {
-        MarketName: "BTC-ETH",
-        High: 0.07817998,
-        Low: 0.06604577,
-        Volume: 45628.13656093,
-        Last: 0.07067988,
-        BaseVolume: 3289.09283520,
-        TimeStamp: "2017-07-28T20:28:27.797",
-        Bid: 0.07067989,
-        Ask: 0.07089528,
-        OpenBuyOrders: 2743,
-        OpenSellOrders: 14066,
-        PrevDay: 0.07800000,
-        Created: "2015-08-14T09:02:24.817"
-    }
-}
-----
-
-==== GetTicks
-Gets the candles for a market.
-
-|=======
-|URL     | `https://bittrex.com/Api/v2.0/pub/market/GetTicks`
-|METHOD  | `GET`
-|PARAMS  | `marketName:string`, `tickInterval:string`, `_:int`
-|EXAMPLE | `https://bittrex.com/Api/v2.0/pub/market/GetTicks?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289433`
-|COMMENT | Probably `_` is a timestamp. `tickInterval` must be in `[“oneMin”, “fiveMin”, “thirtyMin”, “hour”, “day”]`.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : [ // Array of candle objects.
-    {
-        BV: 13.14752793,          // ?????
-        C: 0.000121,              // close
-        H: 0.00182154,            // high
-        L: 0.0001009,             // low
-        O: 0.00182154,            // open
-        T: "2017-07-16T23:00:00", // timestamp
-        V: 68949.3719684          // 24h volume ??
-    },
-    ...
-    { ... }
-    ]
-    
-}
-----
-
-==== GetLatestTick
-Gets the last candle for a market.
-
-|=======
-|URL     | `https://bittrex.com/Api/v2.0/pub/market/GetLatestTick`
-|METHOD  | `GET`
-|PARAMS  | `marketName:string`, `tickInterval:string`, `_:int`
-|EXAMPLE | `GET https://bittrex.com/Api/v2.0/pub/market/GetLatestTick?marketName=BTC-CVC&tickInterval=thirtyMin&_=1500915289434`
-|COMMENT | Probably `_` is a timestamp. `tickInterval` must be in `[“oneMin”, “fiveMin”, “thirtyMin”, “hour”, “day”]`.
-|=======
-
-RESPONSE : 
-[source, javascript]
-----
-{
-    success: true,
-    message: "",
-    result: [ //array with a single element, candle object
-    {
-        O: 0.00007687,
-        H: 0.00007687, 
-        L: 0.00007345,
-        C: 0.00007586,
-        V: 125354.20568187,
-        T: "2017-07-24T16:30:00",
-        BV: 9.38510573
-    }]
-}
-----
-
-=== Private API
-
-==== GetOrderHistory
-Gets the full order history of the user.
-
-|=======
-|URL     | https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
-|METHOD  | `POST`
-|PARAMS  | `__RequestVerificationToken:string`
-|EXAMPLE | `POST https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory` with data `{ __RequestVerificationToken:"HIDDEN_FOR_PRIVACY" }`
-|COMMENT | Probably requires authentication.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : [ //array of orders
-        {
-            Closed: "2017-07-23T21:01:04.65",
-            Commission: 0.00024937,
-            Condition: "NONE",
-            ConditionTarget: null,
-            Exchange: "BTC-RDD",
-            ImmediateOrCancel: false,
-            IsConditional: false,
-            Limit: 4.8e-7,
-            OrderType: "LIMIT_BUY",
-            OrderUuid: "44e8751c-3df8-4a75-841b-c7c2145b746b",
-            Price: 0.09975,
-            PricePerUnit: 4.8e-7,
-            Quantity: 207812.5,
-            QuantityRemaining: 0,
-            TimeStamp: "2017-07-23T18:17:40.387"
-        },
-        ...
-        { ... }
-    ]
-}
-----
-
-=== TradeBuy
-Creates a buy order.
-
-|=======
-| URL     | `https://bittrex.com/api/v2.0/auth/market/TradeBuy`
-| METHOD  | `POST`
-| PARAMS  | `MarketName:string`, `OrderType:string`, `Quantity:float`, `Rate:float`, `TimeInEffect:string`,`ConditionType:string`, `Target:int` `__RequestVerificationToken:string`
-| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeBuy` with data `{ MarketName: "BTC-DGB, OrderType:"LIMIT", Quantity: 10000.02, Rate: 0.0000004, TimeInEffect:"GOOD_TIL_CANCELED", ConditionType: "NONE", Target: 0, __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
-| COMMENT | Probably requires authentication.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : { //results are different from example, this is a real response from a real request.
-        BuyOrSell: "Buy",
-        MarketCurrency: "DGB",
-        MarketName: "BTC-DGB",
-        OrderId: "cb31d615-91eb-408f-87c3-b35b7d751817",
-        OrderType: "LIMIT",
-        Quantity: 49875,
-        Rate:1e-8
-    }
-}
-----
-
-=== TradeSell 
-Creates a sell order
-
-|=======
-| URL     | `https://bittrex.com/api/v2.0/auth/market/TradeSell`
-| METHOD  | `POST`
-| PARAMS  | `MarketName:string`, `OrderType:string`, `Quantity:float`, `Rate:float`, `TimeInEffect:string`,`ConditionType:string`, `Target:int` `__RequestVerificationToken:string`
-| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeSell` with data `{ MarketName: "BTC-DGB, OrderType:"LIMIT", Quantity: 10000.02, Rate: 0.0000004, TimeInEffect:"GOOD_TIL_CANCELED", ConditionType: "NONE", Target: 0, __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
-| COMMENT | Probably requires authentication.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : { //results are different from example, this is a real response from a real request.
-        BuyOrSell: "Sell",
-        MarketCurrency: "DGB",
-        MarketName: "BTC-DGB",
-        OrderId: "HIDDEN_FOR_PRIVACY",
-        OrderType: "LIMIT",
-        Quantity: 49875,
-        Rate:1e-8
-    }
-}
-----
-
-=== TradeCancel
-Cancels a submitted order.
-
-|=======
-| URL     | `https://bittrex.com/api/v2.0/auth/market/TradeCancel`
-| METHOD  | `POST`
-| PARAMS  | `MarketName:string`, `orderId:string`, `__RequestVerificationToken:string`
-| EXAMPLE | `POST https://bittrex.com/api/v2.0/auth/market/TradeCancel` with data `{ MarketName: "BTC-DGB", orderId:"HIDDEN_FOR_PRIVACY", `__RequestVerificationToken:"HIDDEN_FOR_PRIVACY"}`
-| COMMENT | Probably requires authentication.
-|=======
-
-RESPONSE :
-[source, javascript]
-----
-{
-    success: true,
-    message: "",
-    result:null
-}
-----
-
-==== GetCurrencyInfo :
-Gets info about a coin.
-
-|=======
-|URL     | `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo`
-|METHOD  | `POST`
-|PARAMS  | `currencyName:string`, `__RequestVerificationToken:string`
-|EXAMPLE | POST `https://bittrex.com/api/v2.0/pub/Currency/GetCurrencyInfo` with data : `{ currencyName: "CVC", __RequestVerificationToken: "HIDDEN_FOR_PRIVACY"}`
-|COMMENT | Probably this request requires authentication.
-|=======
-
-RESPONSE : 
-[source, javascript]
-----
-{
-    success : true,
-    message : "",
-    result : {
-        BaseAddress:"0xfbb1b73c4f0bda4f67dca266ce6ef42f520fbb98",
-        CoinType: "ETH_CONTRACT",
-        Currency: "CVC",
-        CurrencyLong: "Civic"
-        Health : { // CoinHealth object
-            BlockHeight: 4067747,
-            Currency: "CVC",
-            DepositQueueDepth: 0,
-            IsActive: true,
-            LastChecked: "2017-07-24T16:53:00.33",
-            MinutesSinceBHUpdated: 0,
-            WalletBalance: 0,
-            WalletConnections: 0,
-            WithdrawQueueDepth: 0
-        },
-        IsActive: true,
-        MinConfirmation: 36,
-        Notice: null,
-        TxFee: 0.01
-    }
-}
-----
+. Private API (*WORK IN PROGRESS*)
