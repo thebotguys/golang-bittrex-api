@@ -43,20 +43,8 @@ if err != nil {
     fmt.Println("ERROR OCCURRED: ", err)
 }
 ----
-If you are *VERY HARDCORE* you can use an `Options` struct to handle all connections parameters, like `Connection Timeout`:
-[source, go]
-----
-// Currently this feature is not implemented
-marketSummaries, err := bittrex.GetMarketSummaries(&bittrex.Options{
-    ConnTimeout: time.Second * 30,
-})
-if err != nil {
-    fmt.Println("ERROR OCCURRED: ", err)
-}
-----
-Check out the tests for an example of usage, but almost everytime will be as simple as the code above.
 
-You are strongly advised to check if the API is online at the start of your program, just copy paste the following code:
+You are *strongly* advised to check if the API is online at the start of your program, with the following code:
 [source, go]
 ----
 err := bittrex.IsAPIAlive()
@@ -64,6 +52,26 @@ if err != nil {
     fmt.Println("CANNOT REACH BITTREX API SERVERS: ", err)
 }
 ----
+
+If you are *VERY HARDCORE* you can use an `Options` struct to handle all connections parameters, like `Connection Timeout`:
+[source, go]
+----
+// Currently this feature is not implemented
+marketSummaries, err := bittrex.GetMarketSummariesWithOpts(&bittrex.Options{
+    ConnTimeout: time.Second * 30,
+})
+if err != nil {
+    fmt.Println("ERROR OCCURRED: ", err)
+}
+----
+Check out the tests (like link:https://github.com/thebotguys/golang-bittrex-api/blob/master/bittrex/public_test.go[this] one) for an example of usage, but _most of the times_ it will be as simple as the code above.
+
+== API Limits
+The API limits are unknown at the moment but there is an important note, came from resolving a test error:
+
+Due to the Bittrex anti DDoS System (Cloudflare) it's not possible to perform more than one request per second (otherwise it will be cached, resulting in error like the one described in link:https://github.com/thebotguys/golang-bittrex-api/issues/18[`Issue #18`])
+
+I publicly thank link:https://github.com/mastrolinux[*@mastrolinux*], which helped me in the discovery process of this _(let's call it) bug_.
 
 == Roadmap
 
