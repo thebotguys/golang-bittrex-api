@@ -73,19 +73,5 @@ Due to the Bittrex anti DDoS System (Cloudflare) it's not possible to perform mo
 
 I publicly thank link:https://github.com/mastrolinux[*@mastrolinux*], which helped me in the discovery process of this _(let's call it) bug_.
 
-== Roadmap
-
-. Public API
-+ 
-These API are public and do not require API keys to work.
-+
-  .. link:IsAPIAlive[IsAPIAlive]
-  .. link:IsAPIAlive[APIVersion]
-  .. link:IsAPIAlive[GetMarketSummaries]
-  .. link:IsAPIAlive[GetMarketSummary]
-  .. link:IsAPIAlive[GetMarkets]
-  .. link:IsAPIAlive[GetMarket]
-  .. link:IsAPIAlive[GetTicks]
-  .. link:IsAPIAlive[GetLatestTick]
-
-. Private API (*WORK IN PROGRESS*)
+== Socket API
+*Work in progress*
