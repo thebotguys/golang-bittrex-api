@@ -1,5 +1,5 @@
 = golang-bittrex-api
-The Bot Guy <thebotguy@usa.com>
+The Bot Guy <thebotguy@protonmail.com>
 
 image:https://travis-ci.org/thebotguys/golang-bittrex-api.svg?branch=master["Build Status", link="https://travis-ci.org/thebotguys/golang-bittrex-api"]
 
