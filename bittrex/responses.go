@@ -103,6 +103,21 @@ type CandleStick struct {
 // CandleSticks is an array of CandleStick objects. It is a result from GetTicks
 // and GetLatestTick calls too.
 type CandleSticks []CandleStick
+type csByTimestamp struct {
+	CandleSticks
+}
+
+func (csbt csByTimestamp) Less(i, j int) bool {
+	return time.Time(csbt.CandleSticks[i].Timestamp).Before(time.Time(csbt.CandleSticks[j].Timestamp))
+}
+
+func (csbt csByTimestamp) Len() int {
+	return len(csbt.CandleSticks)
+}
+
+func (csbt csByTimestamp) Swap(i, j int) {
+	csbt.CandleSticks[i], csbt.CandleSticks[j] = csbt.CandleSticks[j], csbt.CandleSticks[i]
+}
 
 // CandleIntervals represent all valid intervals supported
 // by the GetTicks and GetLatestTick calls.

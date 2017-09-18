@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"sort"
 	"time"
 )
 
@@ -153,7 +154,7 @@ func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error
 		TickInterval: &tickInterval,
 		Timestamp:    &now,
 	}
-	result, err := publicCall("market", "GetLatestTick", &GetParameters, nil)
+	result, err := publicCall("market", tickFeature, &GetParameters, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -162,6 +163,7 @@ func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error
 	if err != nil {
 		return nil, err
 	}
+	sort.Sort(csByTimestamp{ret})
 	return ret, nil
 }
 
