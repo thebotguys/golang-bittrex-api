@@ -133,6 +133,7 @@ func GetMarketSummary(marketName string) (*MarketSummary, error) {
 		MarketName: &marketName,
 		Timestamp:  &now,
 	}
+
 	result, err := publicCall("market", "GetMarketSummary", &GetParameters, nil)
 	if err != nil {
 		return nil, err
@@ -147,6 +148,10 @@ func GetMarketSummary(marketName string) (*MarketSummary, error) {
 }
 
 // tickFunc is a common pattern for GetTicks and GetLatestTick functions.
+// candles are sorted by timestamp from the oldest to the most recent:
+//
+//     oldest = index -> 0
+//     newest = index -> len(candlestick_array) - 1
 func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error) {
 	now := time.Now().Unix()
 	GetParameters := publicParams{
@@ -163,7 +168,7 @@ func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error
 	if err != nil {
 		return nil, err
 	}
-	sort.Sort(csByTimestamp{ret})
+	sort.Sort(csByTimestamp{ret}) // sort from most recent
 	return ret, nil
 }
 

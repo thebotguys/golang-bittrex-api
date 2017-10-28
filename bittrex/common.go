@@ -2,7 +2,9 @@ package bittrex
 
 import (
 	"encoding/json"
-	"errors"
+
+	"github.com/juju/errors"
+
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -11,7 +13,7 @@ import (
 
 func init() {
 	defaultConnOpts = ConnectOptions{
-		ConnTimeout: time.Second * 30,
+		ConnTimeout: time.Second * 60,
 	}
 }
 
@@ -56,7 +58,7 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 	URL := fmt.Sprintf("%s/v%s/%s/%s/%s", BaseURL, Version, Visibility, Entity, Feature)
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
-		return nil, err
+		return nil, errors.Annotatef(err, "%s - URL: %s", Feature, URL)
 	}
 
 	req.Header.Set("Accept", "application/json")
@@ -117,7 +119,7 @@ func publicCall(Entity, Feature string, GetParameters *publicParams, options *Co
 func authCall(Entity, Feature string, PostParams *privateParams, options *ConnectOptions) (*json.RawMessage, error) {
 	//options = fixBrokenOpts()
 	if options.Auth.PublicKey == "" || options.Auth.PrivateKey == "" {
-		return nil, errors.New("Cannot perform private api requst without authentication keys")
+		return nil, errors.New("Cannot perform private api request without authentication keys")
 	}
 	//createHMAC signature
 	return apiCall(APIVersion, Private, Entity, Feature, nil, PostParams, options)
