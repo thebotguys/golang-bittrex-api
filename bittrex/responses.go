@@ -145,9 +145,8 @@ func (t *candleTime) UnmarshalJSON(b []byte) error {
 }
 
 func (t candleTime) MarshalJSON() ([]byte, error) {
-	//do your serializing here
 	stamp := fmt.Sprintf("\"%s\"", time.Time(t).Format("2006-01-02T15:04:05"))
-    return []byte(stamp), nil
+	return []byte(stamp), nil
 }
 
 func (result btcPriceResult) Compress() BTCPrice {
