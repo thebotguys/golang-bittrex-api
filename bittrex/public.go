@@ -72,7 +72,7 @@ func GetServerAPIVersion() (string, error) {
 
 // GetBTCPrice returns the current BTC Price.
 func GetBTCPrice() (*BTCPrice, error) {
-	result, err := publicCall("currencies", "GetBTCPrice", nil, nil)
+	result, err := publicCall("currencies", "GetBTCPrice", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func GetMarketSummaries() (MarketSummaries, error) {
 	GetParameters := publicParams{
 		Timestamp: &now,
 	}
-	result, err := publicCall("markets", "GetMarketSummaries", &GetParameters, nil)
+	result, err := publicCall("markets", "GetMarketSummaries", &GetParameters)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func GetMarketSummary(marketName string) (*MarketSummary, error) {
 		Timestamp:  &now,
 	}
 
-	result, err := publicCall("market", "GetMarketSummary", &GetParameters, nil)
+	result, err := publicCall("market", "GetMarketSummary", &GetParameters)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +159,7 @@ func tickFunc(marketName, tickInterval, tickFeature string) (CandleSticks, error
 		TickInterval: &tickInterval,
 		Timestamp:    &now,
 	}
-	result, err := publicCall("market", tickFeature, &GetParameters, nil)
+	result, err := publicCall("market", tickFeature, &GetParameters)
 	if err != nil {
 		return nil, err
 	}
@@ -183,7 +183,7 @@ func GetMarkets() (Markets, error) {
 	GetParameters := publicParams{
 		Timestamp: &now,
 	}
-	result, err := publicCall("markets", "GetMarkets", &GetParameters, nil)
+	result, err := publicCall("markets", "GetMarkets", &GetParameters)
 	if err != nil {
 		return nil, err
 	}
