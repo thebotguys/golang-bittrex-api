@@ -11,12 +11,6 @@ import (
 	"time"
 )
 
-func init() {
-	defaultConnOpts = ConnectOptions{
-		ConnTimeout: time.Second * 60,
-	}
-}
-
 // BaseURL represents the base URL for all requests
 const (
 	BaseURL    = "https://bittrex.com/api"
@@ -33,28 +27,22 @@ type Auth struct {
 	PrivateKey string // The private key to connect to bittrex API.
 }
 
-// defaultConnOpts represents the default configuration for ConnectOptions.
-var defaultConnOpts ConnectOptions
+var (
+	// defaultClient represents the default configuration for HTTP requests to the API.
+	defaultClient = http.Client{
+		Timeout: time.Second * 30,
+	}
+	// client represents the actual configuration for HTTP requests to the API.
+	client = defaultClient
+)
 
-// ConnectOptions represents custom Connect
-// Configurations for HTTP requests.
-type ConnectOptions struct {
-	hmacSignature interface{}
-	Auth          Auth
-	ConnTimeout   time.Duration
-}
-
-// fixBrokenOpts checks the specified options and sets them to the default values.
-func fixBrokenOpts(options **ConnectOptions) {
-	*options = &defaultConnOpts
+// SetCustomHTTPClient sets a custom client for requests.
+func SetCustomHTTPClient(value http.Client) {
+	client = value
 }
 
 // apiCall performs a generic API call.
-func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicParams, PostParameters *privateParams, options *ConnectOptions) (*json.RawMessage, error) {
-	fixBrokenOpts(&options)
-	client := http.Client{
-		Timeout: options.ConnTimeout,
-	}
+func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicParams, PostParameters *privateParams) (*json.RawMessage, error) {
 	URL := fmt.Sprintf("%s/v%s/%s/%s/%s", BaseURL, Version, Visibility, Entity, Feature)
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
@@ -108,21 +96,19 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 // publicCall performs a call to the public bittrex API.
 //
 // It does not need API Keys.
-func publicCall(Entity, Feature string, GetParameters *publicParams, options *ConnectOptions) (*json.RawMessage, error) {
-	fixBrokenOpts(&options)
-	return apiCall(APIVersion, Public, Entity, Feature, GetParameters, nil, options)
+func publicCall(Entity, Feature string, GetParameters *publicParams) (*json.RawMessage, error) {
+	return apiCall(APIVersion, Public, Entity, Feature, GetParameters, nil)
 }
 
 // authCall performs a call to the private bittrex API.
 //
 // It needs an Auth struct to be passed with valid Keys.
-func authCall(Entity, Feature string, PostParams *privateParams, options *ConnectOptions) (*json.RawMessage, error) {
-	//options = fixBrokenOpts()
-	if options.Auth.PublicKey == "" || options.Auth.PrivateKey == "" {
+func authCall(Entity, Feature string, PostParams *privateParams, auth Auth) (*json.RawMessage, error) {
+	if auth.PublicKey == "" || auth.PrivateKey == "" {
 		return nil, errors.New("Cannot perform private api request without authentication keys")
 	}
 	//createHMAC signature
-	return apiCall(APIVersion, Private, Entity, Feature, nil, PostParams, options)
+	return apiCall(APIVersion, Private, Entity, Feature, nil, PostParams)
 }
 
 // addSecurityHeaders adds security headers, required for bittrex private API calls.
