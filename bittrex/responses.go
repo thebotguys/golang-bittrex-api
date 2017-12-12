@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"time"
+
+	"github.com/shopspring/decimal"
 )
 
 type response struct {
@@ -22,19 +24,19 @@ type versionResponse struct {
 
 // MarketSummary is the summary data of a market (usually 24h summary).
 type MarketSummary struct {
-	MarketName     string  `json:"MarketName,required"`     //The name of the market (e.g. BTC-ETH).
-	High           float64 `json:"High,required"`           // The 24h high for the market.
-	Low            float64 `json:"Low,required"`            // The 24h low for the market.
-	Last           float64 `json:"Last,required"`           // The value of the last trade for the market (in base currency).
-	Bid            float64 `json:"Bid,required"`            // The current highest bid value for the market.
-	Ask            float64 `json:"Ask,required"`            // The current lowest ask value for the market.
-	Volume         float64 `json:"Volume,required"`         // The 24h volume of the market, in market currency.
-	BaseVolume     float64 `json:"BaseVolume,required"`     // The 24h volume for the market, in base currency.
-	Timestamp      string  `json:"Timestamp,required"`      // The timestamp of the request.
-	OpenBuyOrders  uint64  `json:"OpenBuyOrders,required"`  // The number of currently open buy orders.
-	OpenSellOrders uint64  `json:"OpenSellOrders,required"` // The number of currently open sell orders.
-	PrevDay        float64 `json:"PrevDay,required"`        // The closing price 24h before.
-	Created        string  `json:"Created,required"`        // The timestamp of the creation of the market.
+	MarketName     string          `json:"MarketName,required"`     //The name of the market (e.g. BTC-ETH).
+	High           decimal.Decimal `json:"High,required"`           // The 24h high for the market.
+	Low            decimal.Decimal `json:"Low,required"`            // The 24h low for the market.
+	Last           decimal.Decimal `json:"Last,required"`           // The value of the last trade for the market (in base currency).
+	Bid            decimal.Decimal `json:"Bid,required"`            // The current highest bid value for the market.
+	Ask            decimal.Decimal `json:"Ask,required"`            // The current lowest ask value for the market.
+	Volume         decimal.Decimal `json:"Volume,required"`         // The 24h volume of the market, in market currency.
+	BaseVolume     decimal.Decimal `json:"BaseVolume,required"`     // The 24h volume for the market, in base currency.
+	Timestamp      string          `json:"Timestamp,required"`      // The timestamp of the request.
+	OpenBuyOrders  uint64          `json:"OpenBuyOrders,required"`  // The number of currently open buy orders.
+	OpenSellOrders uint64          `json:"OpenSellOrders,required"` // The number of currently open sell orders.
+	PrevDay        decimal.Decimal `json:"PrevDay,required"`        // The closing price 24h before.
+	Created        string          `json:"Created,required"`        // The timestamp of the creation of the market.
 }
 
 // MarketSummaries is a set of MarketSummary objects.
@@ -83,17 +85,17 @@ type OrderBook []OpenOrder
 // Market represents a market metadata (name, base currency, trade currency)
 // and so forth.
 type Market struct {
-	BaseCurrency       string  `json:"BaseCurrency,required"`
-	BaseCurrencyLong   string  `json:"BaseCurrencyLong,required"`
-	MarketCurrency     string  `json:"MarketCurrency,required"`
-	MarketCurrencyLong string  `json:"MarketCurrencyLong,required"`
-	MarketName         string  `json:"MarketName,required"`
-	MinTradeSize       float64 `json:"MinTradeSize,required"`
-	IsActive           bool    `json:"IsActive,required"`
-	Created            string  `json:"Created,required"`
-	Notice             string  `json:"Notice,required"`
-	IsSponsored        bool    `json:"IsSponsored,required"`
-	LogoURL            string  `json:"LogoUrl,required"`
+	BaseCurrency       string          `json:"BaseCurrency,required"`
+	BaseCurrencyLong   string          `json:"BaseCurrencyLong,required"`
+	MarketCurrency     string          `json:"MarketCurrency,required"`
+	MarketCurrencyLong string          `json:"MarketCurrencyLong,required"`
+	MarketName         string          `json:"MarketName,required"`
+	MinTradeSize       decimal.Decimal `json:"MinTradeSize,required"`
+	IsActive           bool            `json:"IsActive,required"`
+	Created            string          `json:"Created,required"`
+	Notice             string          `json:"Notice,required"`
+	IsSponsored        bool            `json:"IsSponsored,required"`
+	LogoURL            string          `json:"LogoUrl,required"`
 }
 
 // Markets is a set of markets.
@@ -118,13 +120,13 @@ type btcPriceResult struct {
 
 // CandleStick represents a single candlestick in a chart.
 type CandleStick struct {
-	High       float64    `json:"H,required"`
-	Open       float64    `json:"O,required"`
-	Close      float64    `json:"C,required"`
-	Low        float64    `json:"L,required"`
-	Volume     float64    `json:"V,required"`
-	BaseVolume float64    `json:"BV,required"`
-	Timestamp  candleTime `json:"T,required"`
+	High       decimal.Decimal `json:"H,required"`
+	Open       decimal.Decimal `json:"O,required"`
+	Close      decimal.Decimal `json:"C,required"`
+	Low        decimal.Decimal `json:"L,required"`
+	Volume     decimal.Decimal `json:"V,required"`
+	BaseVolume decimal.Decimal `json:"BV,required"`
+	Timestamp  candleTime      `json:"T,required"`
 }
 
 // CandleSticks is an array of CandleStick objects. It is a result from GetTicks
@@ -180,13 +182,13 @@ func (result btcPriceResult) Compress() BTCPrice {
 	value, _ := result.Bpi.USD.RateFloat.Float64()
 	ts, _ := time.Parse(time.RFC3339, result.Time.UpdatedISO)
 	return BTCPrice{
-		USDValue:  value,
+		USDValue:  decimal.NewFromFloat(value),
 		Timestamp: ts,
 	}
 }
 
 // BTCPrice represents the BTC price at the specified timestamp.
 type BTCPrice struct {
-	USDValue  float64
+	USDValue  decimal.Decimal
 	Timestamp time.Time
 }
