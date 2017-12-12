@@ -37,13 +37,40 @@ type MarketSummary struct {
 	Created        string  `json:"Created,required"`        // The timestamp of the creation of the market.
 }
 
-//MarketSummaries is a set of MarketSummary objects.
+// MarketSummaries is a set of MarketSummary objects.
 type MarketSummaries []MarketSummary
 
-type marketSummariesResult []struct {
+// MarketSummaryResult is a single unit of a MarketSummariesResult response and
+// represents a single couple (Market Data, Market Summary) value.
+type MarketSummaryResult struct {
 	IsVerified bool          `json:"IsVerified"`
 	Market     Market        `json:"Market,required"`
 	Summary    MarketSummary `json:"Summary,required"`
+}
+
+// MarketSummariesResult is the response from a GetSummaries call.
+type MarketSummariesResult []MarketSummaryResult
+
+// Markets returns only the markets.
+func (msr MarketSummariesResult) Markets() Markets {
+	ret := make(Markets, len(msr))
+
+	for i, result := range msr {
+		ret[i] = result.Market
+	}
+
+	return ret
+}
+
+// Summaries returns only the market summaries.
+func (msr MarketSummariesResult) Summaries() MarketSummaries {
+	ret := make(MarketSummaries, len(msr))
+
+	for i, result := range msr {
+		ret[i] = result.Summary
+	}
+
+	return ret
 }
 
 // OpenOrder represents a currently open order.
