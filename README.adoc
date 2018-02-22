@@ -9,7 +9,7 @@ This wrapper will allow to connect to Bittrex API (version 2.0)
 
 [source, bash]
 ----
-$ go get github.com/thebotguys/golang-bittrex-api
+$ go get github.com/thebotguys/golang-bittrex-api/bittrex
 ----
 
 == Calling the API functions
