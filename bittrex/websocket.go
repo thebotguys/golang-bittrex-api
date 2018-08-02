@@ -18,8 +18,8 @@ import (
 // OrderDeltaType is the type of an order delta.
 type OrderDeltaType uint8
 
-// MarketDeltaType is the type of a market delta.
-type MarketDeltaType uint8
+// ExchangeDeltaType is the type of a market delta.
+type ExchangeDeltaType uint8
 
 const (
 	// WebsocketHost represents the API Websocket endpoint.
@@ -41,14 +41,14 @@ const (
 	CancelType OrderDeltaType = 3
 
 	// AddType represents an added market.
-	AddType MarketDeltaType = 0
+	AddType ExchangeDeltaType = 0
 	// RemoveType represents a removed market.
-	RemoveType MarketDeltaType = 1
+	RemoveType ExchangeDeltaType = 1
 	// UpdateType represents an updated market.
-	UpdateType MarketDeltaType = 2
+	UpdateType ExchangeDeltaType = 2
 )
 
-var MinifiedJSONKeys = map[string]string{
+var minifiedJSONKeys = map[string]string{
 	"A":  "Ask",
 	"a":  "Available",
 	"B":  "Bid",
@@ -110,28 +110,33 @@ var MinifiedJSONKeys = map[string]string{
 	"z":  "Pending",
 }
 
-type MarketDelta struct {
-	MarketName string             `json:"MarketName,required,string"`
-	Nonce      int                `json:"Nonce,required,number"`
-	Buys       []marketDeltaOrder `json:"Buys,required"`
-	Sells      []marketDeltaOrder `json:"Sells,required"`
-	Fills      []marketDeltaFill  `json:"Fills,required"`
+// ExchangeDelta is object returned by a SubscribeToExchangeDeltas call.
+type ExchangeDelta struct {
+	MarketName string               `json:"MarketName,required,string"`
+	Nonce      int                  `json:"Nonce,required,number"`
+	Buys       []exchangeDeltaOrder `json:"Buys,required"`
+	Sells      []exchangeDeltaOrder `json:"Sells,required"`
+	Fills      []exchangeDeltaFill  `json:"Fills,required"`
 }
 
+// LiteSummaryDelta is object returned by a SubscribeToLiteSummaryDeltas call.
 type LiteSummaryDelta struct {
 	Deltas []LiteSummary `json:"Deltas,required"`
 }
 
+// SummaryDelta is object returned by a SubscribeToSummaryDeltas call.
 type SummaryDelta struct {
 	Deltas []Summary `json:"Deltas,required"`
 }
 
+// LiteSummary is the summary object as returned from LiteSummaryDelta.
 type LiteSummary struct {
 	MarketName string          `json:"MarketName,required,string"`
 	Last       decimal.Decimal `json:"Last,required,number"`
 	BaseVolume decimal.Decimal `json:"BaseVolume,required,number"`
 }
 
+// Summary is the summary object as returned from SummaryDelta.
 type Summary struct {
 	MarketName     string          `json:"MarketName,required,string"`
 	Last           decimal.Decimal `json:"Last,required,number"`
@@ -148,13 +153,13 @@ type Summary struct {
 	Created        time.Time       `json:"Created,required,string"`
 }
 
-type marketDeltaOrder struct {
+type exchangeDeltaOrder struct {
 	Type     OrderDeltaType  `json:"Type,required,number"`
 	Rate     decimal.Decimal `json:"Rate,required,number"`
 	Quantity decimal.Decimal `json:"Quantity,required,number"`
 }
 
-type marketDeltaFill struct {
+type exchangeDeltaFill struct {
 	FillID    int             `json:"FillId,required,number"`
 	OrderType string          `json:"Type,required,string"`
 	Rate      decimal.Decimal `json:"Rate,required,number"`
@@ -179,10 +184,10 @@ type WSError struct {
 
 // SubscriptionChans contains all possible channels from the bittrex Websocket.
 type SubscriptionChans struct {
-	ExchangeDeltas    map[string]chan MarketDelta // Data from ExchangeDelta subscriptions, divided by market.
-	SummaryDeltas     map[string]chan Summary     // Data from SummaryDelta subscriptions, divided by market.
-	LiteSummaryDeltas map[string]chan LiteSummary // Data from LiteSummaryDelta subscriptions, divided by market.
-	Errors            chan WSError                // Errors thrown by the websocket client method.
+	ExchangeDeltas    map[string]chan ExchangeDelta // Data from ExchangeDelta subscriptions, divided by market.
+	SummaryDeltas     map[string]chan Summary       // Data from SummaryDelta subscriptions, divided by market.
+	LiteSummaryDeltas map[string]chan LiteSummary   // Data from LiteSummaryDelta subscriptions, divided by market.
+	Errors            chan WSError                  // Errors thrown by the websocket client method.
 }
 
 // CloseAll closes all channels.
@@ -200,7 +205,7 @@ func (sc *SubscriptionChans) CloseAll() {
 }
 
 var defaultChannelsSubscription = SubscriptionChans{
-	ExchangeDeltas:    make(map[string]chan MarketDelta),
+	ExchangeDeltas:    make(map[string]chan ExchangeDelta),
 	SummaryDeltas:     make(map[string]chan Summary),
 	LiteSummaryDeltas: make(map[string]chan LiteSummary),
 	Errors:            make(chan WSError),
@@ -255,7 +260,7 @@ func parseSignalrResponse(method string, arguments []json.RawMessage) error {
 		//
 		switch method {
 		case "SubscribeToExchangeDeltas":
-			var decoded MarketDelta
+			var decoded ExchangeDelta
 			err := json.Unmarshal(content, &decoded)
 			if err != nil {
 				return err
@@ -306,7 +311,7 @@ func (wss WebsocketService) Disconnect() {
 }
 
 // SubscribeToExchangeDeltas Subscribes to the ExchangeDeltas service.
-func (wss WebsocketService) SubscribeToExchangeDeltas(market string) (chan MarketDelta, error) {
+func (wss WebsocketService) SubscribeToExchangeDeltas(market string) (chan ExchangeDelta, error) {
 	if ws == nil {
 		return nil, errors.New("Websocket not connected")
 	}
@@ -317,7 +322,7 @@ func (wss WebsocketService) SubscribeToExchangeDeltas(market string) (chan Marke
 			return nil, err
 		}
 
-		Channels.ExchangeDeltas[market] = make(chan (MarketDelta))
+		Channels.ExchangeDeltas[market] = make(chan (ExchangeDelta))
 	}
 	return Channels.ExchangeDeltas[market], nil
 }
