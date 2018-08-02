@@ -8,22 +8,6 @@ import (
 	"github.com/thebotguys/golang-bittrex-api/bittrex"
 )
 
-var latestTestedVersion = "2.11"
-
-func TestGetServerAPIVersion(t *testing.T) {
-	if testIsAPIAlive(t) {
-		version, err := bittrex.GetServerAPIVersion()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if version != latestTestedVersion {
-			t.Errorf(`Please check version you are testing, on server it is %s, 
-while on this client it is %s.`,
-				latestTestedVersion, version)
-		}
-	}
-}
-
 func TestGetBTCPrice(t *testing.T) {
 	if testIsAPIAlive(t) {
 		_, err := bittrex.GetBTCPrice()
