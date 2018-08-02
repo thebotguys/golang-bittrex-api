@@ -1,7 +1,6 @@
 package bittrex
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -39,35 +38,6 @@ func IsAPIAlive() error {
 		return nil
 	}
 	return errors.New("API is not live")
-}
-
-// GetServerAPIVersion returns the version which is currently running on the server.
-func GetServerAPIVersion() (string, error) {
-	var versionResponse versionResponse
-	timestamp := time.Now().UTC().Unix()
-	URL := fmt.Sprintf("https://bittrex.com/Content/version.txt?_=%d", timestamp)
-	response, err := http.Get(URL)
-	if err != nil {
-		return "", err
-	}
-	defer response.Body.Close()
-
-	if response.StatusCode != 200 {
-		return "", fmt.Errorf("Status Code: %d", response.StatusCode)
-	}
-
-	body, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return "", err
-	}
-	body = bytes.TrimPrefix(body, []byte("\xef\xbb\xbf"))
-
-	err = json.Unmarshal(body, &versionResponse)
-	if err != nil {
-		return "", err
-	}
-
-	return versionResponse.Version.String(), nil
 }
 
 // GetBTCPrice returns the current BTC Price.
