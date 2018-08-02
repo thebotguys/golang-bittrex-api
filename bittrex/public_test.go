@@ -58,10 +58,12 @@ func TestGetTicks(t *testing.T) {
 
 func TestGetLatestTick(t *testing.T) {
 	if testIsAPIAlive(t) {
+		time.Sleep(time.Second * 2)
 		_, err := bittrex.GetLatestTick("BTC-ETH", "thirtyMin")
 		if err != nil {
 			t.Fatal(err)
 		}
+		time.Sleep(time.Second * 2)
 		val, err := bittrex.GetLatestTick("INVALID-MARKET-HAHA", "thirtyMin")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
@@ -69,18 +71,21 @@ func TestGetLatestTick(t *testing.T) {
 				"\"thirtyMin\"))\n Value Returned : " +
 				fmt.Sprint(val))
 		}
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetLatestTick("", "thirtyMin")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
 				"not fail (GetLatestTick(\"\", \"thirtyMin\"))\n" +
 				"Value Returned : " + fmt.Sprint(val))
 		}
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetLatestTick("BTC-LTC", "INVALID-INTERVAL-HAHA")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
 				"not fail (GetLatestTick(\"BTC-LTC\", \"INVALID-INTERVAL-HAHA\"))\n" +
 				"Value Returned : " + fmt.Sprint(val))
 		}
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetLatestTick("BTC-LTC", "")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
@@ -102,16 +107,17 @@ func TestGetMarketSummaries(t *testing.T) {
 func TestGetMarketSummary(t *testing.T) {
 	if testIsAPIAlive(t) {
 		var err error
+		time.Sleep(time.Second * 2)
 		_, err = bittrex.GetMarketSummary("BTC-ETH") // no error expected
 		if err != nil {
 			t.Fatal(err)
 		}
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 2)
 		val, err := bittrex.GetMarketSummary("INVALID-MARKET-HAHA") // error expected
 		if err == nil {
 			t.Fatal("Error expected, but function did not fail (GetMarketSummary(\"INVALID-MARKET-HAHA\"))\n Value Returned : " + fmt.Sprint(val))
 		}
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetMarketSummary("") // error expected
 		if err == nil {
 			t.Fatal("Error expected, but function did not fail (GetMarketSummary(\"\"))\n Value Returned : " + fmt.Sprint(val))
