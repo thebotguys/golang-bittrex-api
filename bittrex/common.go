@@ -11,12 +11,11 @@ import (
 	"time"
 )
 
-// BaseURL represents the base URL for all requests
 const (
-	BaseURL    = "https://bittrex.com/api"
-	Private    = "auth"
-	Public     = "pub"
-	APIVersion = "2.0"
+	restURL    = "https://bittrex.com/api"
+	private    = "auth"
+	public     = "pub"
+	apiVersion = "2.0"
 )
 
 // Auth represents the auth credentials to authenticate to the Bittrex API:
@@ -43,7 +42,7 @@ func SetCustomHTTPClient(value http.Client) {
 
 // apiCall performs a generic API call.
 func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicParams, PostParameters *privateParams) (*json.RawMessage, error) {
-	URL := fmt.Sprintf("%s/v%s/%s/%s/%s", BaseURL, Version, Visibility, Entity, Feature)
+	URL := fmt.Sprintf("%s/v%s/%s/%s/%s", restURL, Version, Visibility, Entity, Feature)
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return nil, errors.Annotatef(err, "%s - URL: %s", Feature, URL)
@@ -54,11 +53,11 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 	req.Header.Add("Cache-Control", "no-store")
 	req.Header.Add("Cache-Control", "must-revalidate")
 
-	if Visibility == Public && GetParameters != nil { // Add them to query string
+	if Visibility == public && GetParameters != nil { // Add them to query string
 		queryString := req.URL.Query()
 		GetParameters.AddToQueryString(&queryString)
 		req.URL.RawQuery = queryString.Encode()
-	} else if Visibility == Private {
+	} else if Visibility == private {
 		addSecurityHeaders(req.Header)
 		if PostParameters != nil {
 			PostParameters.AddToPostForm(&req.PostForm)
@@ -97,7 +96,7 @@ func apiCall(Version, Visibility, Entity, Feature string, GetParameters *publicP
 //
 // It does not need API Keys.
 func publicCall(Entity, Feature string, GetParameters *publicParams) (*json.RawMessage, error) {
-	return apiCall(APIVersion, Public, Entity, Feature, GetParameters, nil)
+	return apiCall(apiVersion, public, Entity, Feature, GetParameters, nil)
 }
 
 // authCall performs a call to the private bittrex API.
@@ -108,12 +107,12 @@ func authCall(Entity, Feature string, PostParams *privateParams, auth Auth) (*js
 		return nil, errors.New("Cannot perform private api request without authentication keys")
 	}
 	//createHMAC signature
-	return apiCall(APIVersion, Private, Entity, Feature, nil, PostParams)
+	return apiCall(apiVersion, private, Entity, Feature, nil, PostParams)
 }
 
 // addSecurityHeaders adds security headers, required for bittrex private API calls.
 //
 // Example of this headers which need to be added are HMAC signature.
 func addSecurityHeaders(header http.Header) {
-
+	panic("Not implemented")
 }
