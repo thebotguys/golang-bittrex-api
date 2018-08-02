@@ -35,10 +35,12 @@ func TestGetBTCPrice(t *testing.T) {
 
 func TestGetTicks(t *testing.T) {
 	if testIsAPIAlive(t) {
+		time.Sleep(time.Second * 2)
 		_, err := bittrex.GetTicks("BTC-ETH", "thirtyMin")
 		if err != nil {
 			t.Fatal(err)
 		}
+		time.Sleep(time.Second * 2)
 		val, err := bittrex.GetTicks("INVALID-MARKET-HAHA", "thirtyMin")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
@@ -46,18 +48,21 @@ func TestGetTicks(t *testing.T) {
 				"\"thirtyMin\"))\n Value Returned : " +
 				fmt.Sprint(val))
 		}
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetTicks("", "thirtyMin")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
 				"not fail (GetTicks(\"\", \"thirtyMin\"))\n" +
 				"Value Returned : " + fmt.Sprint(val))
 		}
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetTicks("BTC-LTC", "INVALID-INTERVAL-HAHA")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
 				"not fail (GetTicks(\"BTC-LTC\", \"INVALID-INTERVAL-HAHA\"))\n" +
 				"Value Returned : " + fmt.Sprint(val))
 		}
+		time.Sleep(time.Second * 2)
 		val, err = bittrex.GetTicks("BTC-LTC", "")
 		if err == nil {
 			t.Fatal("Error expected, but function did " +
